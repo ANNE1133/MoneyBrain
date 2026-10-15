@@ -1,0 +1,506 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>เช็คพอร์ต หาปีที่แย่สุด | MoneyBrain</title>
+<meta name="description" content="ใส่ประเภทสินทรัพย์และสัดส่วนพอร์ต ไล่ทุกกรณีที่แต่ละสินทรัพย์โตหรือลง แล้วดูว่าปีที่แย่สุดพอร์ตติดลบกี่เปอร์เซ็นต์ ใช้ฟรี">
+<link rel="canonical" href="https://anne1133.github.io/MoneyBrain/check-port/">
+<meta name="theme-color" content="#0b6b5c">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="MoneyBrain">
+<meta property="og:title" content="เช็คพอร์ต หาปีที่แย่สุด | MoneyBrain">
+<meta property="og:description" content="ใส่ประเภทสินทรัพย์และสัดส่วนพอร์ต ไล่ทุกกรณีที่แต่ละสินทรัพย์โตหรือลง แล้วดูว่าปีที่แย่สุดพอร์ตติดลบกี่เปอร์เซ็นต์ ใช้ฟรี">
+<meta property="og:url" content="https://anne1133.github.io/MoneyBrain/check-port/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="เช็คพอร์ต หาปีที่แย่สุด | MoneyBrain">
+<meta name="twitter:description" content="ใส่ประเภทสินทรัพย์และสัดส่วนพอร์ต ไล่ทุกกรณีที่แต่ละสินทรัพย์โตหรือลง แล้วดูว่าปีที่แย่สุดพอร์ตติดลบกี่เปอร์เซ็นต์ ใช้ฟรี">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"เช็คพอร์ต หาปีที่แย่สุด","url":"https://anne1133.github.io/MoneyBrain/check-port/","description":"ใส่ประเภทสินทรัพย์และสัดส่วนพอร์ต ไล่ทุกกรณีที่แต่ละสินทรัพย์โตหรือลง แล้วดูว่าปีที่แย่สุดพอร์ตติดลบกี่เปอร์เซ็นต์","applicationCategory":"FinanceApplication","operatingSystem":"Any","inLanguage":"th","offers":{"@type":"Offer","price":"0","priceCurrency":"THB"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: asset editor on top, then headline numbers, sorted-scenario chart, breakdown tables, full scenario list. */
+:root {
+  --bg: #eef2f3;
+  --surface: #ffffff;
+  --fg: #12262b;
+  --muted: #5d7279;
+  --line: #d3dde0;
+  --accent: #0b6b5c;
+  --accent-soft: #d9efe9;
+  --bad: #b3382c;
+  --bad-soft: #f8e0dc;
+  --font-display: "Bai Jamjuree", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Thai", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1a1e; --surface: #142529; --fg: #e4eef0; --muted: #8fa8af; --line: #284046;
+    --accent: #3fc2a8; --accent-soft: #163c37; --bad: #f27d6f; --bad-soft: #3d1f1c;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1a1e; --surface: #142529; --fg: #e4eef0; --muted: #8fa8af; --line: #284046;
+  --accent: #3fc2a8; --accent-soft: #163c37; --bad: #f27d6f; --bad-soft: #3d1f1c;
+  color-scheme: dark;
+}
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+  padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+[hidden] { display: none !important; }
+.wrap { max-width: 1080px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.back { align-self: flex-start; color: var(--accent); font-weight: 500; font-size: 14px; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: -10px 0 0; max-width: 64ch; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-width: 0; }
+.panel h2 { font-family: var(--font-display); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
+.input { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); min-width: 0; }
+.input:focus-within { border-color: var(--accent); outline: 2px solid var(--accent-soft); }
+.input input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; color: var(--fg); font: 600 16px var(--font-display); padding: 9px 11px; font-variant-numeric: tabular-nums; outline: none; }
+.input input[type="text"] { font-family: var(--font-body); font-weight: 500; }
+.input .unit { padding-right: 11px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+
+/* asset editor */
+.ahead, .arow { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 40px; gap: 10px; align-items: center; }
+.ahead { font-size: 12.5px; color: var(--muted); padding-bottom: 6px; }
+.arow { margin-bottom: 10px; }
+.cell { min-width: 0; }
+.rm { height: 40px; border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 8px; font-size: 18px; cursor: pointer; }
+.rm:hover:not(:disabled) { color: var(--bad); border-color: var(--bad); }
+.rm:disabled { opacity: .4; cursor: not-allowed; }
+.btn { font: 500 14px var(--font-body); border: 1px solid var(--line); background: transparent; color: var(--fg); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn:focus-visible, .rm:focus-visible, .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 6px; }
+.wstat { font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.wstat.warn { color: var(--bad); }
+.opt { display: flex; gap: 8px; align-items: flex-start; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); font-size: 14px; }
+.opt input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
+.opt .hint { display: block; color: var(--muted); font-size: 12.5px; }
+.note-ex { color: var(--muted); font-size: 12.5px; margin: 10px 0 0; max-width: 72ch; }
+@media (max-width: 680px) {
+  .ahead { display: none; }
+  .arow { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px; border: 1px solid var(--line); border-radius: 8px; gap: 8px; position: relative; }
+  .arow .cell:first-child { grid-column: 1 / -1; padding-right: 48px; }
+  .cell[data-label]::before { content: attr(data-label); display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+  .arow .cell.rmc { position: absolute; top: 12px; right: 12px; }
+  .arow .cell.rmc::before { display: none; }
+}
+
+/* results */
+.count { color: var(--muted); font-size: 13.5px; margin: 0; }
+.hero { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 680px) { .hero { grid-template-columns: minmax(0, 1fr); } }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; min-width: 0; }
+.stat .k { font-size: 13px; color: var(--muted); }
+.stat .v { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); line-height: 1.2; font-variant-numeric: tabular-nums; }
+.stat .v.neg { color: var(--bad); }
+.stat .v.pos { color: var(--accent); }
+.stat .d { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.readout { padding: 10px 12px; background: var(--bg); border-radius: 8px; margin-bottom: 10px; font-size: 13.5px; }
+.ro-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; align-items: baseline; margin-bottom: 6px; color: var(--muted); }
+.ro-ret { font-family: var(--font-display); font-size: 18px; font-variant-numeric: tabular-nums; }
+.neg { color: var(--bad); }
+.pos { color: var(--accent); }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font-size: 12.5px; border-radius: 4px; padding: 1px 8px; white-space: nowrap; }
+.chip.dn { background: var(--bad-soft); color: var(--bad); }
+.chip.up { background: var(--accent-soft); color: var(--accent); }
+.chip.fl { background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+svg { display: block; width: 100%; height: auto; touch-action: pan-y; }
+.ax { fill: var(--muted); font: 11px var(--font-body); }
+.gl { stroke: var(--line); stroke-width: 1; }
+.zero { stroke: var(--muted); stroke-width: 1.2; }
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 13.5px; }
+th, td { text-align: right; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 500; font-size: 12.5px; white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+td.l, th.l { text-align: left; }
+tfoot td { font-weight: 600; border-bottom: 0; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-bottom: 12px; }
+.seg button { font: 500 13.5px var(--font-body); background: transparent; border: 0; color: var(--muted); padding: 7px 14px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent-soft); color: var(--accent); }
+.more { margin-top: 12px; }
+.about h2.big { font-family: var(--font-display); font-size: 20px; margin: 0 0 10px; text-transform: none; letter-spacing: 0; color: var(--fg); }
+.about h3 { font-family: var(--font-display); font-size: 16px; margin: 18px 0 4px; }
+.about p { margin: 0 0 10px; max-width: 68ch; color: var(--muted); }
+.about ul { margin: 0 0 10px; padding-left: 20px; max-width: 68ch; color: var(--muted); }
+.about li { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">&larr; MoneyBrain</a>
+  <h1>เช็คพอร์ต หาปีที่แย่สุด</h1>
+  <p class="sub">ใส่สินทรัพย์ สัดส่วน และผลตอบแทนในปีที่โตกับปีที่ลง แล้วระบบจะไล่ทุกกรณีที่แต่ละสินทรัพย์โตหรือลงพร้อมกัน เพื่อหาว่าปีที่แย่สุดพอร์ตติดลบเท่าไร</p>
+
+  <section class="panel" aria-label="พอร์ตของคุณ">
+    <h2>พอร์ตของคุณ</h2>
+    <div class="ahead" aria-hidden="true"><span>ประเภทสินทรัพย์</span><span>สัดส่วน</span><span>ปีที่โต</span><span>ปีที่ลง</span><span></span></div>
+    <div id="rows"></div>
+    <datalist id="assetTypes">
+      <option value="หุ้นไทย"></option><option value="หุ้นสหรัฐ"></option><option value="หุ้นโลก"></option>
+      <option value="หุ้นตลาดเกิดใหม่"></option><option value="ตราสารหนี้"></option><option value="ทองคำ"></option>
+      <option value="กองทุนอสังหาริมทรัพย์"></option><option value="คริปโต"></option><option value="เงินสด"></option>
+    </datalist>
+    <div class="toolbar">
+      <button class="btn" id="add" type="button">+ เพิ่มสินทรัพย์</button>
+      <button class="btn" id="fix" type="button" hidden>ปรับให้รวม 100%</button>
+      <span class="wstat" id="wstat" aria-live="polite"></span>
+    </div>
+    <label class="opt" for="flat">
+      <input type="checkbox" id="flat">
+      <span>รวมกรณี "ไม่โต" (ผลตอบแทน 0%) เป็นอีกสถานะของแต่ละสินทรัพย์
+        <span class="hint">ปิดไว้ = แต่ละสินทรัพย์มีสองสถานะ คือโตหรือลง เปิด = มีสามสถานะ คือลง ไม่โต หรือโต</span></span>
+    </label>
+    <p class="note-ex">ตัวเลขที่ใส่ไว้ตอนเปิดหน้าเป็นตัวอย่างสมมติเพื่อให้เห็นการทำงาน ไม่ใช่ข้อมูลจริงของสินทรัพย์ใด ให้แก้เป็นค่าที่คุณเชื่อ เช่น ดูจากผลตอบแทนย้อนหลังของสินทรัพย์นั้นในปีที่แย่และปีที่ดี ช่อง "ปีที่ลง" ใส่เป็นเลขบวก ระบบคิดเป็นลบให้</p>
+  </section>
+
+  <p class="count" id="count"></p>
+
+  <div class="hero" aria-live="polite">
+    <div class="stat"><div class="k">ปีที่แย่สุด</div><div class="v neg" id="sWorst">-</div><div class="d" id="sWorstD"></div></div>
+    <div class="stat"><div class="k">ปีที่ดีสุด</div><div class="v pos" id="sBest">-</div><div class="d" id="sBestD"></div></div>
+    <div class="stat"><div class="k">กรณีที่พอร์ตติดลบ</div><div class="v" id="sLoss">-</div><div class="d" id="sLossD"></div></div>
+  </div>
+
+  <section class="panel" aria-label="กราฟทุกกรณี">
+    <h2>ทุกกรณี เรียงจากแย่สุดไปดีสุด</h2>
+    <div class="readout" id="readout"></div>
+    <svg id="chart" viewBox="0 0 720 300" role="img" aria-label="กราฟผลตอบแทนพอร์ตของทุกกรณี เรียงจากแย่สุดไปดีสุด"></svg>
+  </section>
+
+  <div class="two">
+    <section class="panel" aria-label="ปีที่แย่สุดแยกรายสินทรัพย์">
+      <h2>ปีที่แย่สุด แยกรายสินทรัพย์</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>สินทรัพย์</th><th>สัดส่วน</th><th>ปีนั้น</th><th>ผลต่อพอร์ต</th></tr></thead>
+          <tbody id="worstRows"></tbody>
+          <tfoot id="worstFoot"></tfoot>
+        </table>
+      </div>
+    </section>
+    <section class="panel" aria-label="แย่สุดตามจำนวนที่ลงพร้อมกัน">
+      <h2>แย่สุด ตามจำนวนที่ลงพร้อมกัน</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>ลงพร้อมกัน</th><th>พอร์ตแย่สุด</th><th class="l">สินทรัพย์ที่ลง</th></tr></thead>
+          <tbody id="kRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <section class="panel" aria-label="รายการทุกกรณี">
+    <h2>รายการทุกกรณี</h2>
+    <div class="seg" role="group" aria-label="เรียงลำดับ">
+      <button type="button" id="sortAsc" aria-pressed="true">แย่สุดก่อน</button>
+      <button type="button" id="sortDesc" aria-pressed="false">ดีสุดก่อน</button>
+    </div>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>#</th><th>พอร์ต</th><th class="l">สถานะของแต่ละสินทรัพย์</th></tr></thead>
+        <tbody id="scRows"></tbody>
+      </table>
+    </div>
+    <button class="btn more" id="more" type="button" hidden></button>
+  </section>
+
+  <section class="panel about" aria-labelledby="about-h">
+    <h2 class="big" id="about-h">เครื่องมือนี้คำนวณอะไร</h2>
+    <p>พอร์ตจริงไม่ได้โตเท่ากันทุกปี บางปีสินทรัพย์บางตัวลง บางตัวโต เครื่องมือนี้จึงให้ใส่ผลตอบแทนของแต่ละสินทรัพย์ไว้สองแบบ คือปีที่โตและปีที่ลง แล้วไล่ทุกชุดที่เป็นไปได้ ถ้ามี 4 สินทรัพย์และมีสองสถานะ จะได้ 2 ยกกำลัง 4 เท่ากับ 16 กรณี ผลตอบแทนของพอร์ตในแต่ละกรณีคือผลรวมของสัดส่วนคูณผลตอบแทนของแต่ละตัว</p>
+    <h3>วิธีอ่านผล</h3>
+    <ul>
+      <li>ปีที่แย่สุดคือกรณีที่พอร์ตติดลบหนักที่สุดจากทุกชุดที่ไล่ได้ ในแบบจำลองนี้มักเป็นกรณีที่ทุกตัวลงพร้อมกัน ซึ่งเป็นภาพกรณีเลวร้ายที่สุด</li>
+      <li>ตาราง "แย่สุด ตามจำนวนที่ลงพร้อมกัน" ช่วยดูว่าถ้าลงพร้อมกัน 1 ตัว 2 ตัว หรือมากกว่านั้น พอร์ตแย่สุดเท่าไร เหมาะกับการประเมินว่ากระจายความเสี่ยงได้ผลแค่ไหน</li>
+      <li>จำนวนกรณีที่ติดลบนับทุกกรณีเท่ากัน ไม่ใช่ความน่าจะเป็น เพราะเครื่องมือนี้ไม่ได้บอกว่ากรณีไหนเกิดขึ้นบ่อยแค่ไหน</li>
+    </ul>
+    <p>ผลลัพธ์เป็นการทดสอบสถานการณ์ตามค่าที่กรอก ไม่รวมภาษี ค่าธรรมเนียม และการปรับสัดส่วนพอร์ตระหว่างปี ไม่ใช่คำแนะนำการลงทุนหรือการรับประกันผลตอบแทน</p>
+  </section>
+</div>
+
+<script>
+/*CORE*/
+function analyze(list, withFlat) {
+  var n = list.length, ST = withFlat ? 3 : 2, tw = 0, i, a;
+  list.forEach(function (x) { tw += Math.max(0, x.w); });
+  var w = list.map(function (x) { return tw > 0 ? Math.max(0, x.w) / tw : 0; });
+  var vals = list.map(function (x) {
+    var d = -Math.abs(x.d) / 100, g = Math.abs(x.g) / 100;
+    return withFlat ? [d, 0, g] : [d, g];
+  });
+  var S = Math.pow(ST, n);
+  var ret = new Float64Array(S), dc = new Uint8Array(S);
+  for (i = 0; i < S; i++) {
+    var c = i, r = 0, k = 0;
+    for (a = 0; a < n; a++) {
+      var s = c % ST; c = (c - s) / ST;
+      r += w[a] * vals[a][s];
+      if (s === 0) k++;
+    }
+    ret[i] = r; dc[i] = k;
+  }
+  var order = new Uint32Array(S);
+  for (i = 0; i < S; i++) order[i] = i;
+  order.sort(function (p, q) { return ret[p] - ret[q] || p - q; });
+  var worstK = [];
+  for (i = 0; i <= n; i++) worstK.push(-1);
+  for (i = 0; i < S; i++) {
+    var kk = dc[i];
+    if (worstK[kk] < 0 || ret[i] < ret[worstK[kk]]) worstK[kk] = i;
+  }
+  var loss = 0;
+  for (i = 0; i < S; i++) if (ret[i] < -1e-12) loss++;
+  return { n: n, ST: ST, S: S, w: w, vals: vals, ret: ret, dc: dc, order: order, worstK: worstK, loss: loss };
+}
+function decode(res, i) {
+  var out = [], c = i;
+  for (var a = 0; a < res.n; a++) { var s = c % res.ST; c = (c - s) / res.ST; out.push(s); }
+  return out;
+}
+/*ENDCORE*/
+
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var MAX = 10, PAGE = 25, uid = 0;
+  var assets = [
+    { name: "หุ้นสหรัฐ", w: 40, g: 12, d: 30 },
+    { name: "หุ้นไทย", w: 15, g: 8, d: 20 },
+    { name: "ตราสารหนี้", w: 25, g: 3.5, d: 7 },
+    { name: "ทองคำ", w: 10, g: 8, d: 12 },
+    { name: "คริปโต", w: 5, g: 60, d: 65 },
+    { name: "เงินสด", w: 5, g: 1.5, d: 0 }
+  ].map(function (a) { a.id = ++uid; return a; });
+
+  var res = null, listNames = [], shown = PAGE, dir = "asc", hoverPos = 0, geom = null;
+
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var pct = function (x, d) { var v = Math.abs(x * 100).toFixed(d === undefined ? 1 : d); return (x < -1e-12 ? "−" : "+") + v + "%"; };
+  var cls = function (x) { return x < -1e-12 ? "neg" : "pos"; };
+  var num = function (n) { return n.toLocaleString("th-TH"); };
+
+  function nameOf(i) { var t = assets[i].name.trim(); return t || ("สินทรัพย์ " + (i + 1)); }
+
+  function renderRows() {
+    var host = $("rows"); host.innerHTML = "";
+    assets.forEach(function (a, i) {
+      var row = document.createElement("div"); row.className = "arow";
+      var f = function (key, label, type, unit, step) {
+        return '<div class="cell" data-label="' + label + '"><div class="input"><input id="a' + a.id + '-' + key + '" type="' + type + '"' +
+          (type === "text" ? ' list="assetTypes" autocomplete="off"' : ' inputmode="decimal" min="0" step="' + step + '"') +
+          ' aria-label="' + label + '">' + (unit ? '<span class="unit">' + unit + '</span>' : "") + '</div></div>';
+      };
+      row.innerHTML = f("name", "ประเภทสินทรัพย์", "text", "", "") + f("w", "สัดส่วน", "number", "%", "1") + f("g", "ปีที่โต", "number", "%", "0.5") + f("d", "ปีที่ลง", "number", "−%", "0.5") +
+        '<div class="cell rmc"><button class="rm" type="button" aria-label="ลบสินทรัพย์ ' + (i + 1) + '">&times;</button></div>';
+      host.appendChild(row);
+      var bind = function (key, prop, isNum) {
+        var el = $("a" + a.id + "-" + key);
+        el.value = a[prop];
+        el.addEventListener("input", function () {
+          a[prop] = isNum ? (isFinite(parseFloat(el.value)) ? parseFloat(el.value) : 0) : el.value;
+          update();
+        });
+      };
+      bind("name", "name", false); bind("w", "w", true); bind("g", "g", true); bind("d", "d", true);
+      var rm = row.querySelector(".rm");
+      rm.disabled = assets.length <= 1;
+      rm.addEventListener("click", function () { assets.splice(i, 1); renderRows(); update(); });
+    });
+    $("add").disabled = assets.length >= MAX;
+  }
+
+  function weightStatus() {
+    var tot = 0; assets.forEach(function (a) { tot += Math.max(0, a.w); });
+    var el = $("wstat"), off = Math.abs(tot - 100) > 0.01;
+    el.textContent = "รวมสัดส่วน " + (Math.round(tot * 100) / 100) + "%" + (off ? " ระบบปรับสัดส่วนให้รวมเป็น 100% ตอนคำนวณ" : "");
+    el.className = "wstat" + (off ? " warn" : "");
+    $("fix").hidden = !off || tot <= 0;
+  }
+
+  function chips(states) {
+    return states.map(function (s, a) {
+      var n = esc(nameOf(a));
+      if (s === 0) return '<span class="chip dn">↓ ' + n + '</span>';
+      if (s === res.ST - 1) return '<span class="chip up">↑ ' + n + '</span>';
+      return '<span class="chip fl">– ' + n + '</span>';
+    }).join("");
+  }
+  function namesWhere(states, want) {
+    var out = [];
+    states.forEach(function (s, a) { if (want(s)) out.push(nameOf(a)); });
+    return out;
+  }
+
+  function update() {
+    weightStatus();
+    listNames = assets.map(function (a, i) { return { name: nameOf(i), w: a.w, g: a.g, d: a.d }; });
+    res = analyze(listNames, $("flat").checked);
+    shown = PAGE; hoverPos = 0;
+    renderAll();
+  }
+
+  function renderAll() {
+    var S = res.S, o = res.order;
+    $("count").innerHTML = "ไล่ครบ " + res.ST + "<sup>" + res.n + "</sup> = " + num(S) + " กรณี";
+
+    var wi = o[0], bi = o[S - 1];
+    var wst = decode(res, wi), bst = decode(res, bi);
+    var wr = res.ret[wi], br = res.ret[bi];
+    $("sWorst").textContent = pct(wr); $("sWorst").className = "v " + cls(wr);
+    var dn = namesWhere(wst, function (s) { return s === 0; });
+    $("sWorstD").textContent = dn.length ? dn.join(", ") + " ลงพร้อมกัน" : "ไม่มีสินทรัพย์ไหนลง";
+    $("sBest").textContent = pct(br); $("sBest").className = "v " + cls(br);
+    var up = namesWhere(bst, function (s) { return s === res.ST - 1; });
+    $("sBestD").textContent = up.length ? up.join(", ") + " โตพร้อมกัน" : "ไม่มีสินทรัพย์ไหนโต";
+    $("sLoss").textContent = num(res.loss) + " กรณี";
+    $("sLossD").textContent = "จาก " + num(S) + " กรณี (" + (res.loss / S * 100).toFixed(1) + "%)";
+
+    // worst breakdown
+    var rows = "", tot = 0;
+    wst.forEach(function (s, a) {
+      var v = res.vals[a][s], c = res.w[a] * v; tot += c;
+      rows += "<tr><td>" + esc(nameOf(a)) + "</td><td>" + (res.w[a] * 100).toFixed(1) + "%</td><td class=\"" + cls(v) + "\">" + pct(v) + "</td><td class=\"" + cls(c) + "\">" + pct(c, 2) + "</td></tr>";
+    });
+    $("worstRows").innerHTML = rows;
+    $("worstFoot").innerHTML = "<tr><td>รวมพอร์ต</td><td>100%</td><td></td><td class=\"" + cls(tot) + "\">" + pct(tot, 2) + "</td></tr>";
+
+    // by number of simultaneous drops
+    var k = "";
+    for (var j = 0; j <= res.n; j++) {
+      var idx = res.worstK[j]; if (idx < 0) continue;
+      var st = decode(res, idx), r = res.ret[idx];
+      var d2 = namesWhere(st, function (s) { return s === 0; });
+      k += "<tr><td>" + j + " ตัว</td><td class=\"" + cls(r) + "\">" + pct(r) + "</td><td class=\"l\">" + (d2.length ? esc(d2.join(", ")) : "ไม่มี") + "</td></tr>";
+    }
+    $("kRows").innerHTML = k;
+
+    drawChart();
+    showHover(0);
+    renderList();
+  }
+
+  function niceStep(rangePct) {
+    var steps = [1, 2, 5, 10, 20, 25, 50, 100, 200, 500];
+    for (var i = 0; i < steps.length; i++) if (rangePct / steps[i] <= 6) return steps[i];
+    return 1000;
+  }
+
+  function drawChart() {
+    var W = 720, H = 300, L = 54, R = 14, T = 14, B = 30, S = res.S, o = res.order;
+    var lo = Math.min(0, res.ret[o[0]]), hi = Math.max(0, res.ret[o[S - 1]]);
+    if (hi - lo < 0.01) hi = lo + 0.01;
+    var pad = (hi - lo) * 0.06; lo -= lo < 0 ? pad : 0; hi += pad;
+    var pw = W - L - R, y = function (v) { return T + (H - T - B) * (1 - (v - lo) / (hi - lo)); };
+    var y0 = y(0);
+    geom = { W: W, L: L, R: R, T: T, B: B, H: H, pw: pw, y: y, lo: lo, hi: hi };
+
+    var s = "", step = niceStep((hi - lo) * 100);
+    for (var t = Math.ceil(lo * 100 / step) * step; t <= hi * 100 + 1e-9; t += step) {
+      var yy = y(t / 100);
+      s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '"/>';
+      s += '<text class="ax" x="' + (L - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + (t < 0 ? "−" : t > 0 ? "+" : "") + Math.abs(t) + '%</text>';
+    }
+    if (S <= 96) {
+      var bw = pw / S, gap = bw > 6 ? 2 : (bw > 2 ? 1 : 0);
+      for (var p = 0; p < S; p++) {
+        var v = res.ret[o[p]], yv = y(v), top = Math.min(yv, y0), h = Math.max(Math.abs(yv - y0), 1);
+        s += '<rect x="' + (L + p * bw + gap / 2).toFixed(2) + '" y="' + top.toFixed(2) + '" width="' + Math.max(bw - gap, 0.6).toFixed(2) + '" height="' + h.toFixed(2) + '" fill="' + (v < -1e-12 ? "var(--bad)" : "var(--accent)") + '" shape-rendering="crispEdges"/>';
+      }
+      geom.bars = true;
+    } else {
+      var m = Math.min(S, 400), d = "M" + L + "," + y0.toFixed(2);
+      for (var j = 0; j < m; j++) {
+        var i2 = Math.round(j * (S - 1) / (m - 1));
+        d += " L" + (L + pw * j / (m - 1)).toFixed(2) + "," + y(res.ret[o[i2]]).toFixed(2);
+      }
+      d += " L" + (L + pw) + "," + y0.toFixed(2) + " Z";
+      s += '<defs><clipPath id="cNeg"><rect x="' + L + '" y="' + y0.toFixed(2) + '" width="' + pw + '" height="' + Math.max(0, H - B - y0).toFixed(2) + '"/></clipPath>' +
+           '<clipPath id="cPos"><rect x="' + L + '" y="' + T + '" width="' + pw + '" height="' + Math.max(0, y0 - T).toFixed(2) + '"/></clipPath></defs>';
+      s += '<path d="' + d + '" fill="var(--bad)" opacity="0.85" clip-path="url(#cNeg)"/>';
+      s += '<path d="' + d + '" fill="var(--accent)" opacity="0.85" clip-path="url(#cPos)"/>';
+      geom.bars = false;
+    }
+    s += '<line class="zero" x1="' + L + '" x2="' + (W - R) + '" y1="' + y0.toFixed(2) + '" y2="' + y0.toFixed(2) + '"/>';
+    s += '<text class="ax" x="' + L + '" y="' + (H - 8) + '">แย่สุด</text>';
+    s += '<text class="ax" x="' + (W - R) + '" y="' + (H - 8) + '" text-anchor="end">ดีสุด</text>';
+    s += '<g id="cur"></g>';
+    s += '<rect id="hit" x="' + L + '" y="' + T + '" width="' + pw + '" height="' + (H - T - B) + '" fill="transparent"/>';
+    $("chart").innerHTML = s;
+
+    var onMove = function (e) {
+      var rect = $("chart").getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width * W;
+      var p2 = Math.floor((px - L) / pw * S);
+      showHover(Math.max(0, Math.min(S - 1, p2)));
+    };
+    $("hit").addEventListener("pointermove", onMove);
+    $("hit").addEventListener("pointerdown", onMove);
+  }
+
+  function showHover(p) {
+    hoverPos = p;
+    var S = res.S, i = res.order[p], r = res.ret[i], st = decode(res, i);
+    $("readout").innerHTML = '<div class="ro-top"><span>กรณีที่ ' + num(p + 1) + ' จาก ' + num(S) + ' (เรียงจากแย่สุด)</span><b class="ro-ret ' + cls(r) + '">' + pct(r) + '</b></div><div class="chips">' + chips(st) + '</div>';
+    var c = $("cur"); if (!c || !geom) return;
+    var cx = geom.L + geom.pw * (p + 0.5) / S, cy = geom.y(r);
+    c.innerHTML = '<line x1="' + cx.toFixed(2) + '" x2="' + cx.toFixed(2) + '" y1="' + geom.T + '" y2="' + (geom.H - geom.B) + '" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>' +
+      '<circle cx="' + cx.toFixed(2) + '" cy="' + cy.toFixed(2) + '" r="4.5" fill="var(--surface)" stroke="' + (r < -1e-12 ? "var(--bad)" : "var(--accent)") + '" stroke-width="2.5"/>';
+  }
+
+  function renderList() {
+    var S = res.S, o = res.order, html = "", n = Math.min(shown, S);
+    for (var j = 0; j < n; j++) {
+      var pos = dir === "asc" ? j : S - 1 - j, i = o[pos], r = res.ret[i];
+      html += "<tr><td>" + num(j + 1) + "</td><td class=\"" + cls(r) + "\">" + pct(r) + "</td><td class=\"l\"><div class=\"chips\">" + chips(decode(res, i)) + "</div></td></tr>";
+    }
+    $("scRows").innerHTML = html;
+    var more = $("more");
+    if (n < S) { more.hidden = false; more.textContent = "แสดงเพิ่ม (เหลืออีก " + num(S - n) + " กรณี)"; } else more.hidden = true;
+  }
+
+  $("add").addEventListener("click", function () {
+    if (assets.length >= MAX) return;
+    assets.push({ id: ++uid, name: "", w: 0, g: 5, d: 10 });
+    renderRows(); update();
+    var el = $("a" + assets[assets.length - 1].id + "-name"); if (el) el.focus();
+  });
+  $("fix").addEventListener("click", function () {
+    var tot = 0; assets.forEach(function (a) { tot += Math.max(0, a.w); });
+    if (tot <= 0) return;
+    var sum = 0, big = 0;
+    assets.forEach(function (a, i) { a.w = Math.round(Math.max(0, a.w) / tot * 1000) / 10; sum += a.w; if (a.w > assets[big].w) big = i; });
+    assets[big].w = Math.round((assets[big].w + 100 - sum) * 10) / 10;
+    renderRows(); update();
+  });
+  $("flat").addEventListener("change", update);
+  $("more").addEventListener("click", function () { shown += PAGE; renderList(); });
+  var setDir = function (d) {
+    dir = d; shown = PAGE;
+    $("sortAsc").setAttribute("aria-pressed", d === "asc"); $("sortDesc").setAttribute("aria-pressed", d === "desc");
+    renderList();
+  };
+  $("sortAsc").addEventListener("click", function () { setDir("asc"); });
+  $("sortDesc").addEventListener("click", function () { setDir("desc"); });
+
+  renderRows();
+  update();
+})();
+</script>
+</body>
+</html>
