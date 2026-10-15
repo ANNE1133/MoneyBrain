@@ -26,20 +26,20 @@
 /* Layout: wordmark header, then a responsive grid of tool cards. Add a card per new tool. */
 :root {
   --bg: #eef2f3; --surface: #ffffff; --fg: #12262b; --muted: #5d7279; --line: #d3dde0;
-  --accent: #0b6b5c; --accent-soft: #d9efe9; --boost: #c47a0a; --flat: #6c8791; --contrib: #b9cbd0;
+  --accent: #0b6b5c; --accent-soft: #d9efe9; --boost: #c47a0a; --flat: #6c8791; --contrib: #b9cbd0; --bad: #b3382c;
   --font-display: "Bai Jamjuree", "IBM Plex Sans Thai", system-ui, sans-serif;
   --font-body: "IBM Plex Sans Thai", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0d1a1e; --surface: #142529; --fg: #e4eef0; --muted: #8fa8af; --line: #284046;
-    --accent: #3fc2a8; --accent-soft: #163c37; --boost: #f0a93a; --flat: #86a3ad; --contrib: #2f4a52;
+    --accent: #3fc2a8; --accent-soft: #163c37; --boost: #f0a93a; --flat: #86a3ad; --contrib: #2f4a52; --bad: #f27d6f;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --bg: #0d1a1e; --surface: #142529; --fg: #e4eef0; --muted: #8fa8af; --line: #284046;
-  --accent: #3fc2a8; --accent-soft: #163c37; --boost: #f0a93a; --flat: #86a3ad; --contrib: #2f4a52;
+  --accent: #3fc2a8; --accent-soft: #163c37; --boost: #f0a93a; --flat: #86a3ad; --contrib: #2f4a52; --bad: #f27d6f;
   color-scheme: dark;
 }
 :root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
@@ -86,6 +86,28 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(28px, 
       <h2>DCA แบบ Annual Boost</h2>
       <p>ใส่ระยะเวลา เงินต้น เงิน DCA เริ่มต้น และเปอร์เซ็นต์ที่เพิ่มทุกปี พร้อมเพดาน DCA สูงสุด ดูกราฟและเงินพอร์ตสุทธิ</p>
       <span class="go">เปิดเครื่องคำนวณ &rarr;</span>
+    </a>
+
+    <a class="card" href="check-port/">
+      <span class="kind">เครื่องวิเคราะห์</span>
+      <svg viewBox="0 0 280 90" role="img" aria-label="ตัวอย่างกราฟผลตอบแทนพอร์ตทุกกรณี เรียงจากแย่สุดไปดีสุด">
+        <rect x="4" y="45" width="16" height="40" fill="var(--bad)"/>
+        <rect x="26" y="45" width="16" height="30" fill="var(--bad)"/>
+        <rect x="48" y="45" width="16" height="22" fill="var(--bad)"/>
+        <rect x="70" y="45" width="16" height="15" fill="var(--bad)"/>
+        <rect x="92" y="45" width="16" height="9" fill="var(--bad)"/>
+        <rect x="114" y="45" width="16" height="3" fill="var(--bad)"/>
+        <rect x="136" y="40" width="16" height="5" fill="var(--accent)"/>
+        <rect x="158" y="34" width="16" height="11" fill="var(--accent)"/>
+        <rect x="180" y="27" width="16" height="18" fill="var(--accent)"/>
+        <rect x="202" y="20" width="16" height="25" fill="var(--accent)"/>
+        <rect x="224" y="13" width="16" height="32" fill="var(--accent)"/>
+        <rect x="246" y="6" width="16" height="39" fill="var(--accent)"/>
+        <line x1="0" x2="280" y1="45" y2="45" stroke="var(--muted)" stroke-width="1"/>
+      </svg>
+      <h2>เช็คพอร์ต หาปีที่แย่สุด</h2>
+      <p>ใส่สินทรัพย์และสัดส่วน ไล่ทุกกรณีที่แต่ละตัวโตหรือลง แล้วดูว่าปีที่แย่สุดพอร์ตติดลบกี่เปอร์เซ็นต์</p>
+      <span class="go">เปิดเครื่องมือ &rarr;</span>
     </a>
   </main>
 
