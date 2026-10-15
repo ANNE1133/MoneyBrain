@@ -69,10 +69,12 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
 .input:focus-within { border-color: var(--accent); outline: 2px solid var(--accent-soft); }
 .input input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; color: var(--fg); font: 600 16px var(--font-display); padding: 9px 11px; font-variant-numeric: tabular-nums; outline: none; }
 .input input[type="text"] { font-family: var(--font-body); font-weight: 500; }
+.input input:disabled { opacity: .5; cursor: not-allowed; }
+.input input::placeholder { font-weight: 400; color: var(--muted); opacity: .8; }
 .input .unit { padding-right: 11px; color: var(--muted); font-size: 13px; white-space: nowrap; }
 
 /* asset editor */
-.ahead, .arow { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) 40px; gap: 10px; align-items: center; }
+.ahead, .arow { display: grid; grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) 40px; gap: 10px; align-items: center; }
 .ahead { font-size: 12.5px; color: var(--muted); padding-bottom: 6px; }
 .arow { margin-bottom: 10px; }
 .cell { min-width: 0; }
@@ -111,10 +113,17 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
 .opt input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
 .opt .hint { display: block; color: var(--muted); font-size: 12.5px; }
 .note-ex { color: var(--muted); font-size: 12.5px; margin: 10px 0 0; max-width: 72ch; }
+.refs { margin-top: 14px; font-size: 13px; }
+.refs summary { cursor: pointer; font-weight: 500; color: var(--accent); }
+.refs summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.refs .tablewrap { margin-top: 10px; }
+.refs table { min-width: 680px; }
+.refs th, .refs td { text-align: left; }
+.refs a { color: var(--accent); }
 .storage-warning { color: var(--bad); font-size: 13px; margin: 8px 0 0; }
 @media (max-width: 680px) {
   .ahead { display: none; }
-  .arow { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px; border: 1px solid var(--line); border-radius: 8px; gap: 8px; position: relative; }
+  .arow { grid-template-columns: repeat(2, minmax(0, 1fr)); padding: 12px; border: 1px solid var(--line); border-radius: 8px; gap: 8px; position: relative; }
   .arow .cell:first-child { grid-column: 1 / -1; padding-right: 48px; }
   .cell[data-label]::before { content: attr(data-label); display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
   .arow .cell.rmc { position: absolute; top: 12px; right: 12px; }
@@ -179,10 +188,10 @@ tfoot td { font-weight: 600; border-bottom: 0; }
 
   <section class="panel" aria-label="พอร์ตของคุณ">
     <h2>พอร์ตของคุณ</h2>
-    <div class="ahead" aria-hidden="true"><span>ประเภทสินทรัพย์</span><span>สัดส่วน</span><span>ปีที่โต</span><span>ปีที่ลง</span><span></span></div>
+    <div class="ahead" aria-hidden="true"><span>ประเภทสินทรัพย์</span><span>สัดส่วน</span><span>ปีที่โต</span><span>ปีที่ลง</span><span>ผลตอบแทนเฉลี่ย (ถ้ามี)</span><span></span></div>
     <div id="rows"></div>
     <datalist id="assetTypes">
-      <option value="หุ้นไทย"></option><option value="หุ้นสหรัฐ"></option><option value="หุ้นโลก"></option>
+      <option value="หุ้นไทย"></option><option value="หุ้นไทยธนาคาร"></option><option value="หุ้นสหรัฐ"></option><option value="หุ้นโลก"></option>
       <option value="หุ้นตลาดเกิดใหม่"></option><option value="ตราสารหนี้"></option><option value="ทองคำ"></option>
       <option value="กองทุนอสังหาริมทรัพย์"></option><option value="คริปโต"></option><option value="เงินสด"></option>
     </datalist>
@@ -241,7 +250,25 @@ tfoot td { font-weight: 600; border-bottom: 0; }
       <span>รวมกรณี "ไม่โต" (ผลตอบแทน 0%) เป็นอีกสถานะของแต่ละสินทรัพย์
         <span class="hint">ปิดไว้ = แต่ละสินทรัพย์มีสองสถานะ คือโตหรือลง เปิด = มีสามสถานะ คือลง ไม่โต หรือโต</span></span>
     </label>
-    <p class="note-ex">ตัวเลขที่ใส่ไว้ตอนเปิดหน้าเป็นตัวอย่างสมมติเพื่อให้เห็นการทำงาน ไม่ใช่ข้อมูลจริงของสินทรัพย์ใด ให้แก้เป็นค่าที่คุณเชื่อ เช่น ดูจากผลตอบแทนย้อนหลังของสินทรัพย์นั้นในปีที่แย่และปีที่ดี ช่อง "ปีที่ลง" ใส่เป็นเลขบวก ระบบคิดเป็นลบให้ ระบบบันทึกค่าที่กรอกไว้ในเบราว์เซอร์นี้อัตโนมัติ</p>
+    <p class="note-ex">ค่าตั้งต้นของ "ปีที่โต" คือผลตอบแทนเฉลี่ยต่อปีย้อนหลัง และ "ปีที่ลง" คือปีที่แย่สุดย้อนหลังของสินทรัพย์ตัวแทน (ดูที่มาด้านล่าง) เป็นข้อมูลอดีต ไม่รับประกันอนาคต แก้เป็นค่าที่คุณเชื่อได้ ช่อง "ปีที่ลง" ใส่เป็นเลขบวก ระบบคิดเป็นลบให้ ระบบบันทึกค่าที่กรอกไว้ในเบราว์เซอร์นี้อัตโนมัติ</p>
+    <p class="note-ex">ช่อง "ผลตอบแทนเฉลี่ย (ถ้ามี)" ไม่บังคับ ถ้าคุณมีข้อมูลผลตอบแทนเฉลี่ยต่อปีย้อนหลังของสินทรัพย์นั้น ให้กรอก ระบบจะใช้ค่านี้เป็นผลตอบแทนในกรณี "โต" แทนช่อง "ปีที่โต" (ช่องนั้นจะถูกปิดไว้ชั่วคราว) ถ้าเว้นว่าง ระบบใช้ค่าในช่อง "ปีที่โต" เหมือนเดิม</p>
+    <details class="refs">
+      <summary>ที่มาของค่าตั้งต้น</summary>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>สินทรัพย์</th><th>ข้อมูลที่ใช้เป็นตัวแทน</th><th>โต (เฉลี่ยต่อปี)</th><th>ลง (แย่สุด)</th><th>แหล่ง</th></tr></thead>
+          <tbody>
+            <tr><td>หุ้นสหรัฐ</td><td>S&amp;P 500 รวมปันผล (USD) ปี 1928-2025</td><td>11.86%</td><td>−43.84% (ปี 1931)</td><td><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html" target="_blank" rel="noopener noreferrer">Damodaran</a></td></tr>
+            <tr><td>หุ้นไทยธนาคาร</td><td>กองทุนดัชนีหุ้นธนาคาร K-BANKING ถึง 14 ต.ค. 2026 ตัวลงเป็นการลงลึกสุดใน 10 ปี ไม่ใช่ปีปฏิทิน</td><td>7.11% (10 ปี)</td><td>−53.85%</td><td><a href="https://www.finnomena.com/fund/K-BANKING/performance/maxDrawdown" target="_blank" rel="noopener noreferrer">Finnomena</a></td></tr>
+            <tr><td>ตราสารหนี้</td><td>ยังไม่ปรับ เพราะไม่พบปีที่แย่สุดของตราสารหนี้ไทย (พันธบัตรสหรัฐ 10 ปี เฉลี่ย 4.82% แย่สุด −17.83% ปี 2022)</td><td>3.5% (ตัวอย่าง)</td><td>−7% (ตัวอย่าง)</td><td><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html" target="_blank" rel="noopener noreferrer">Damodaran</a></td></tr>
+            <tr><td>ทองคำ</td><td>ราคาทองคำ (USD) ปี 1928-2025</td><td>7.36%</td><td>−32.60% (ปี 1981)</td><td><a href="https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histretSP.html" target="_blank" rel="noopener noreferrer">Damodaran</a></td></tr>
+            <tr><td>กองทุนอสังหาริมทรัพย์</td><td>FTSE Nareit All Equity REITs สหรัฐ ผลตอบแทนทบต้น 50 ปี</td><td>11.6%</td><td>−37.73% (ปี 2008)</td><td><a href="https://reit.com/sites/default/files/returns/sum.pdf" target="_blank" rel="noopener noreferrer">Nareit</a>, <a href="https://www.reit.com/sites/default/files/media/Portals/0/PDF/Jan09NMU.pdf" target="_blank" rel="noopener noreferrer">ปี 2008</a></td></tr>
+            <tr><td>หุ้นตลาดเกิดใหม่</td><td>ETF EEM ปี 2009-2026 ข้อมูลเริ่มปี 2009 จึงไม่รวมปี 2008</td><td>9.2%</td><td>−20.6% (ปี 2022)</td><td><a href="https://chartrow.com/quote/eem/returns" target="_blank" rel="noopener noreferrer">ChartRow</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note-ex">ข้อมูลเป็นตลาดสหรัฐและหน่วยดอลลาร์เป็นหลัก ต่างช่วงเวลากัน เทียบกันตรงๆ ไม่ได้ทั้งหมด</p>
+    </details>
     <p class="storage-warning" id="storageWarning" role="status" hidden>เบราว์เซอร์นี้ไม่สามารถบันทึกข้อมูลได้ การเปลี่ยนแปลงอาจหายเมื่อปิดหน้า</p>
   </section>
 
@@ -365,22 +392,24 @@ function decode(res, i) {
     { name: "สมดุล", score: 1, stocks: 60, bonds: 30, cash: 10, description: "แบ่งระหว่างสินทรัพย์เติบโตกับสินทรัพย์ที่มักผันผวนน้อยกว่า แต่ยังขาดทุนได้" },
     { name: "เติบโต", score: 2, stocks: 80, bonds: 15, cash: 5, description: "เน้นการเติบโตระยะยาวและยอมรับความผันผวน/การขาดทุนที่มากขึ้น" }
   ];
+  // avg: optional user-supplied historical average return (%); "" = not provided -> fall back to g
   var assets = [
-    { name: "หุ้นสหรัฐ", w: 40, g: 12, d: 30 },
-    { name: "หุ้นไทย", w: 15, g: 8, d: 20 },
+    { name: "หุ้นสหรัฐ", w: 40, g: 11.9, d: 43.8 },
+    { name: "หุ้นไทยธนาคาร", w: 5, g: 7.1, d: 53.9 },
     { name: "ตราสารหนี้", w: 25, g: 3.5, d: 7 },
-    { name: "ทองคำ", w: 10, g: 8, d: 12 },
-    { name: "คริปโต", w: 5, g: 60, d: 65 },
-    { name: "เงินสด", w: 5, g: 1.5, d: 0 }
-  ].map(function (a) { a.id = ++uid; return a; });
+    { name: "ทองคำ", w: 20, g: 7.4, d: 32.6 },
+    { name: "กองทุนอสังหาริมทรัพย์", w: 10, g: 11.6, d: 37.7 },
+    { name: "หุ้นตลาดเกิดใหม่", w: 0, g: 9.2, d: 20.6 }
+  ].map(function (a) { a.id = ++uid; a.avg = ""; return a; });
 
   var res = null, listNames = [], shown = PAGE, dir = "asc", hoverPos = 0, geom = null;
-  var storageKey = "moneybrain:check-port:v1", storageAvailable = true;
+  var storageKey = "moneybrain:check-port:v2", storageAvailable = true;
 
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var pct = function (x, d) { var v = Math.abs(x * 100).toFixed(d === undefined ? 1 : d); return (x < -1e-12 ? "−" : "+") + v + "%"; };
   var cls = function (x) { return x < -1e-12 ? "neg" : "pos"; };
   var num = function (n) { return n.toLocaleString("th-TH"); };
+  var hasAvg = function (a) { return typeof a.avg === "number" && isFinite(a.avg); };
 
   function storageFailed(error) {
     storageAvailable = false;
@@ -410,7 +439,8 @@ function decode(res, i) {
       }
       uid = 0;
       assets = state.assets.map(function (a) {
-        return { id: ++uid, name: a.name, w: a.w, g: a.g, d: a.d };
+        return { id: ++uid, name: a.name, w: a.w, g: a.g, d: a.d,
+                 avg: (typeof a.avg === "number" && isFinite(a.avg)) ? a.avg : "" };
       });
       $("flat").checked = state.flat;
       if (state.risk && riskQuestions.every(function (id) {
@@ -428,7 +458,7 @@ function decode(res, i) {
     if (!storageAvailable) return;
     try {
       localStorage.setItem(storageKey, JSON.stringify({
-        assets: assets.map(function (a) { return { name: a.name, w: a.w, g: a.g, d: a.d }; }),
+        assets: assets.map(function (a) { return { name: a.name, w: a.w, g: a.g, d: a.d, avg: hasAvg(a) ? a.avg : null }; }),
         flat: $("flat").checked,
         risk: riskQuestions.reduce(function (answers, id) {
           answers[id] = $(id).value;
@@ -446,12 +476,14 @@ function decode(res, i) {
     var host = $("rows"); host.innerHTML = "";
     assets.forEach(function (a, i) {
       var row = document.createElement("div"); row.className = "arow";
-      var f = function (key, label, type, unit, step) {
+      var f = function (key, label, type, unit, step, placeholder) {
         return '<div class="cell" data-label="' + label + '"><div class="input"><input id="a' + a.id + '-' + key + '" type="' + type + '"' +
           (type === "text" ? ' list="assetTypes" autocomplete="off"' : ' inputmode="decimal" min="0" step="' + step + '"') +
+          (placeholder ? ' placeholder="' + placeholder + '"' : '') +
           ' aria-label="' + label + '">' + (unit ? '<span class="unit">' + unit + '</span>' : "") + '</div></div>';
       };
-      row.innerHTML = f("name", "ประเภทสินทรัพย์", "text", "", "") + f("w", "สัดส่วน", "number", "%", "1") + f("g", "ปีที่โต", "number", "%", "0.5") + f("d", "ปีที่ลง", "number", "−%", "0.5") +
+      row.innerHTML = f("name", "ประเภทสินทรัพย์", "text", "", "") + f("w", "สัดส่วน", "number", "%", "1") + f("g", "ปีที่โต", "number", "%", "0.1") + f("d", "ปีที่ลง", "number", "−%", "0.1") +
+        f("avg", "ผลตอบแทนเฉลี่ย (ถ้ามี)", "number", "%", "0.1", "ไม่ระบุ") +
         '<div class="cell rmc"><button class="rm" type="button" aria-label="ลบสินทรัพย์ ' + (i + 1) + '">&times;</button></div>';
       host.appendChild(row);
       var bind = function (key, prop, isNum) {
@@ -463,6 +495,14 @@ function decode(res, i) {
         });
       };
       bind("name", "name", false); bind("w", "w", true); bind("g", "g", true); bind("d", "d", true);
+      // optional average: blank means "not provided", so it must not collapse to 0
+      var avgEl = $("a" + a.id + "-avg");
+      avgEl.value = a.avg;
+      avgEl.addEventListener("input", function () {
+        var v = parseFloat(avgEl.value);
+        a.avg = (avgEl.value.trim() !== "" && isFinite(v)) ? v : "";
+        update();
+      });
       var rm = row.querySelector(".rm");
       rm.disabled = assets.length <= 1;
       rm.addEventListener("click", function () { assets.splice(i, 1); renderRows(); update(); });
@@ -553,7 +593,14 @@ function decode(res, i) {
     weightStatus();
     renderAllocation();
     renderRecommendation();
-    listNames = assets.map(function (a, i) { return { name: nameOf(i), w: a.w, g: a.g, d: a.d }; });
+    // when an average return is provided it replaces the "growth year" return; otherwise the original g is used
+    assets.forEach(function (a) {
+      var gEl = $("a" + a.id + "-g");
+      if (gEl) gEl.disabled = hasAvg(a);
+    });
+    listNames = assets.map(function (a, i) {
+      return { name: nameOf(i), w: a.w, g: hasAvg(a) ? a.avg : a.g, d: a.d };
+    });
     res = analyze(listNames, $("flat").checked);
     shown = PAGE; hoverPos = 0;
     renderAll();
@@ -680,7 +727,7 @@ function decode(res, i) {
 
   $("add").addEventListener("click", function () {
     if (assets.length >= MAX) return;
-    assets.push({ id: ++uid, name: "", w: 0, g: 5, d: 10 });
+    assets.push({ id: ++uid, name: "", w: 0, g: 5, d: 10, avg: "" });
     renderRows(); update();
     var el = $("a" + assets[assets.length - 1].id + "-name"); if (el) el.focus();
   });
