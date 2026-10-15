@@ -100,6 +100,7 @@ th { color: var(--muted); font-weight: 500; font-size: 12.5px; }
 tbody tr:last-child td { font-weight: 600; border-bottom: 0; }
 .note { color: var(--muted); font-size: 12.5px; margin: 12px 0 0; max-width: 70ch; }
 .err { color: #b3261e; font-size: 12.5px; min-height: 0; }
+.storage-warning { color: #b3261e; font-size: 12.5px; margin: 8px 0 0; }
 @media (prefers-reduced-motion: no-preference) { .stat .v { transition: opacity .15s; } }
 
 .about { margin-top: 28px; }
@@ -124,7 +125,7 @@ img { max-width: 100%; }
 <div class="wrap">
   <a class="back" href="../">&larr; MoneyBrain</a>
   <h1>วางแผน DCA แบบ Annual Boost</h1>
-  <p class="sub">ใส่ระยะเวลา เงินต้น เงิน DCA รายเดือนเริ่มต้น และเปอร์เซ็นต์ที่เพิ่มขึ้นทุกปี แล้วดูว่าพอร์ตสุทธิจะเป็นเท่าไรเมื่อครบกำหนด</p>
+  <p class="sub">ใส่ระยะเวลา เงินต้น เงิน DCA รายเดือนเริ่มต้น และเปอร์เซ็นต์ที่เพิ่มขึ้นทุกปี แล้วดูว่าพอร์ตสุทธิจะเป็นเท่าไรเมื่อครบกำหนด ค่าที่กรอกจะบันทึกไว้ในเบราว์เซอร์นี้อัตโนมัติ</p>
 
   <div class="grid">
     <section class="panel" aria-label="ตัวแปร">
@@ -158,6 +159,7 @@ img { max-width: 100%; }
         <span class="hint">ตัวอย่างสมมติ ปรับเป็น 0 เพื่อดูเฉพาะเงินที่ลงทุนเอง คำนวณทบต้นรายเดือน</span>
       </div>
       <div class="err" id="err" role="alert"></div>
+      <p class="storage-warning" id="storageWarning" role="status" hidden>เบราว์เซอร์นี้ไม่สามารถบันทึกข้อมูลได้ การเปลี่ยนแปลงอาจหายเมื่อปิดหน้า</p>
     </section>
 
     <div class="right">
@@ -249,10 +251,51 @@ img { max-width: 100%; }
   }
 
   var data = [], geom = null, activeIdx = -1;
+  var storageKey = "moneybrain:dca-annual-boost:v1", storageAvailable = true;
 
   function readNum(id, def) {
     var v = parseFloat($(id).value);
     return isFinite(v) ? v : def;
+  }
+
+  function storageFailed(error) {
+    storageAvailable = false;
+    console.error("Unable to save or restore MoneyBrain DCA state.", error);
+    $("storageWarning").hidden = false;
+  }
+
+  function restoreInputs() {
+    var saved;
+    try {
+      saved = localStorage.getItem(storageKey);
+    } catch (error) {
+      storageFailed(error);
+      return;
+    }
+    if (saved === null) return;
+    try {
+      var values = JSON.parse(saved);
+      var ids = ["years", "principal", "dca", "boost", "cap", "ret"];
+      if (!values || ids.some(function (id) { return typeof values[id] !== "string"; })) {
+        throw new Error("Saved DCA state has an invalid format.");
+      }
+      ids.forEach(function (id) { $(id).value = values[id]; });
+    } catch (error) {
+      console.error("Ignoring invalid saved MoneyBrain DCA state.", error);
+    }
+  }
+
+  function saveInputs() {
+    if (!storageAvailable) return;
+    try {
+      var values = {};
+      ["years", "principal", "dca", "boost", "cap", "ret"].forEach(function (id) {
+        values[id] = $(id).value;
+      });
+      localStorage.setItem(storageKey, JSON.stringify(values));
+    } catch (error) {
+      storageFailed(error);
+    }
   }
 
   function render() {
@@ -355,8 +398,12 @@ img { max-width: 100%; }
       '<circle cx="' + cx + '" cy="' + geom.y(d.bal) + '" r="5" fill="var(--boost)" stroke="var(--surface)" stroke-width="2"/>';
   }
 
-  ["years", "principal", "dca", "boost", "ret"].forEach(function (id) {
-    $(id).addEventListener("input", render);
+  restoreInputs();
+  ["years", "principal", "dca", "boost", "cap", "ret"].forEach(function (id) {
+    $(id).addEventListener("input", function () {
+      saveInputs();
+      render();
+    });
   });
   render();
 })();

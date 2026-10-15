@@ -90,6 +90,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
 .opt input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
 .opt .hint { display: block; color: var(--muted); font-size: 12.5px; }
 .note-ex { color: var(--muted); font-size: 12.5px; margin: 10px 0 0; max-width: 72ch; }
+.storage-warning { color: var(--bad); font-size: 13px; margin: 8px 0 0; }
 @media (max-width: 680px) {
   .ahead { display: none; }
   .arow { grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 12px; border: 1px solid var(--line); border-radius: 8px; gap: 8px; position: relative; }
@@ -168,7 +169,8 @@ tfoot td { font-weight: 600; border-bottom: 0; }
       <span>รวมกรณี "ไม่โต" (ผลตอบแทน 0%) เป็นอีกสถานะของแต่ละสินทรัพย์
         <span class="hint">ปิดไว้ = แต่ละสินทรัพย์มีสองสถานะ คือโตหรือลง เปิด = มีสามสถานะ คือลง ไม่โต หรือโต</span></span>
     </label>
-    <p class="note-ex">ตัวเลขที่ใส่ไว้ตอนเปิดหน้าเป็นตัวอย่างสมมติเพื่อให้เห็นการทำงาน ไม่ใช่ข้อมูลจริงของสินทรัพย์ใด ให้แก้เป็นค่าที่คุณเชื่อ เช่น ดูจากผลตอบแทนย้อนหลังของสินทรัพย์นั้นในปีที่แย่และปีที่ดี ช่อง "ปีที่ลง" ใส่เป็นเลขบวก ระบบคิดเป็นลบให้</p>
+    <p class="note-ex">ตัวเลขที่ใส่ไว้ตอนเปิดหน้าเป็นตัวอย่างสมมติเพื่อให้เห็นการทำงาน ไม่ใช่ข้อมูลจริงของสินทรัพย์ใด ให้แก้เป็นค่าที่คุณเชื่อ เช่น ดูจากผลตอบแทนย้อนหลังของสินทรัพย์นั้นในปีที่แย่และปีที่ดี ช่อง "ปีที่ลง" ใส่เป็นเลขบวก ระบบคิดเป็นลบให้ ระบบบันทึกค่าที่กรอกไว้ในเบราว์เซอร์นี้อัตโนมัติ</p>
+    <p class="storage-warning" id="storageWarning" role="status" hidden>เบราว์เซอร์นี้ไม่สามารถบันทึกข้อมูลได้ การเปลี่ยนแปลงอาจหายเมื่อปิดหน้า</p>
   </section>
 
   <p class="count" id="count"></p>
@@ -289,11 +291,60 @@ function decode(res, i) {
   ].map(function (a) { a.id = ++uid; return a; });
 
   var res = null, listNames = [], shown = PAGE, dir = "asc", hoverPos = 0, geom = null;
+  var storageKey = "moneybrain:check-port:v1", storageAvailable = true;
 
   var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var pct = function (x, d) { var v = Math.abs(x * 100).toFixed(d === undefined ? 1 : d); return (x < -1e-12 ? "−" : "+") + v + "%"; };
   var cls = function (x) { return x < -1e-12 ? "neg" : "pos"; };
   var num = function (n) { return n.toLocaleString("th-TH"); };
+
+  function storageFailed(error) {
+    storageAvailable = false;
+    console.error("Unable to save or restore MoneyBrain check-port state.", error);
+    $("storageWarning").hidden = false;
+  }
+
+  function restoreState() {
+    var saved;
+    try {
+      saved = localStorage.getItem(storageKey);
+    } catch (error) {
+      storageFailed(error);
+      return;
+    }
+    if (saved === null) return;
+    try {
+      var state = JSON.parse(saved);
+      if (!state || !Array.isArray(state.assets) || state.assets.length < 1 || state.assets.length > MAX ||
+          typeof state.flat !== "boolean" || !state.assets.every(function (a) {
+            return a && typeof a.name === "string" &&
+              typeof a.w === "number" && isFinite(a.w) &&
+              typeof a.g === "number" && isFinite(a.g) &&
+              typeof a.d === "number" && isFinite(a.d);
+          })) {
+        throw new Error("Saved check-port state has an invalid format.");
+      }
+      uid = 0;
+      assets = state.assets.map(function (a) {
+        return { id: ++uid, name: a.name, w: a.w, g: a.g, d: a.d };
+      });
+      $("flat").checked = state.flat;
+    } catch (error) {
+      console.error("Ignoring invalid saved MoneyBrain check-port state.", error);
+    }
+  }
+
+  function saveState() {
+    if (!storageAvailable) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        assets: assets.map(function (a) { return { name: a.name, w: a.w, g: a.g, d: a.d }; }),
+        flat: $("flat").checked
+      }));
+    } catch (error) {
+      storageFailed(error);
+    }
+  }
 
   function nameOf(i) { var t = assets[i].name.trim(); return t || ("สินทรัพย์ " + (i + 1)); }
 
@@ -348,6 +399,7 @@ function decode(res, i) {
   }
 
   function update() {
+    saveState();
     weightStatus();
     listNames = assets.map(function (a, i) { return { name: nameOf(i), w: a.w, g: a.g, d: a.d }; });
     res = analyze(listNames, $("flat").checked);
@@ -498,6 +550,7 @@ function decode(res, i) {
   $("sortAsc").addEventListener("click", function () { setDir("asc"); });
   $("sortDesc").addEventListener("click", function () { setDir("desc"); });
 
+  restoreState();
   renderRows();
   update();
 })();
