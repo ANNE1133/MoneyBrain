@@ -86,6 +86,27 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
 .toolbar { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; margin-top: 6px; }
 .wstat { font-size: 13.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .wstat.warn { color: var(--bad); }
+.allocation-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
+.allocation { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: 8px; }
+.allocation h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 15px; }
+.allocation-current { display: grid; grid-template-columns: minmax(120px, 200px) minmax(0, 1fr); gap: 16px; align-items: center; }
+.allocation-current svg { width: 100%; max-width: 200px; margin: 0 auto; }
+.allocation-legend { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+.allocation-legend li { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 8px; align-items: center; font-size: 13px; }
+.allocation-swatch { width: 12px; height: 12px; border-radius: 3px; }
+.allocation-value { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.allocation-empty { fill: var(--line); }
+.allocation-empty-label { fill: var(--muted); font: 12px var(--font-body); }
+.risk-questions { display: grid; gap: 10px; }
+.risk-question { display: grid; gap: 4px; font-size: 13px; }
+.risk-question select { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; background: var(--bg); color: var(--fg); font: 13px var(--font-body); }
+.risk-question select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.recommendation { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+.recommendation h4 { margin: 0 0 6px; font-family: var(--font-display); font-size: 14px; }
+.recommendation p { margin: 0 0 8px; color: var(--muted); font-size: 12.5px; }
+.recommendation table { font-size: 13px; }
+.allocation-sources { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+.allocation-sources a { color: var(--accent); }
 .opt { display: flex; gap: 8px; align-items: flex-start; margin-top: 16px; padding-top: 16px; border-top: 1px dashed var(--line); font-size: 14px; }
 .opt input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
 .opt .hint { display: block; color: var(--muted); font-size: 12.5px; }
@@ -98,6 +119,12 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
   .cell[data-label]::before { content: attr(data-label); display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
   .arow .cell.rmc { position: absolute; top: 12px; right: 12px; }
   .arow .cell.rmc::before { display: none; }
+  .allocation-panels { grid-template-columns: minmax(0, 1fr); }
+  .allocation-current { grid-template-columns: minmax(120px, 180px) minmax(0, 1fr); }
+}
+@media (max-width: 420px) {
+  .allocation-current { grid-template-columns: minmax(0, 1fr); }
+  .allocation-current svg { width: min(100%, 180px); }
 }
 
 /* results */
@@ -163,6 +190,51 @@ tfoot td { font-weight: 600; border-bottom: 0; }
       <button class="btn" id="add" type="button">+ เพิ่มสินทรัพย์</button>
       <button class="btn" id="fix" type="button" hidden>ปรับให้รวม 100%</button>
       <span class="wstat" id="wstat" aria-live="polite"></span>
+    </div>
+    <div class="allocation-panels">
+      <section class="allocation" aria-label="สัดส่วนพอร์ตปัจจุบัน">
+        <h3>Asset allocation ปัจจุบัน</h3>
+        <div class="allocation-current">
+          <svg id="allocationChart" viewBox="0 0 200 200" role="img" aria-label="กราฟวงกลมแสดงสัดส่วนสินทรัพย์ในพอร์ต"></svg>
+          <ul class="allocation-legend" id="allocationLegend" aria-label="สัดส่วนแยกตามสินทรัพย์"></ul>
+        </div>
+      </section>
+      <section class="allocation" aria-label="แนะนำ asset allocation ตามความเสี่ยง">
+        <h3>Asset allocation ตัวอย่างตามความเสี่ยง</h3>
+        <div class="risk-questions">
+          <label class="risk-question" for="riskHorizon">จะเริ่มใช้เงินก้อนนี้เมื่อไร?
+            <select id="riskHorizon">
+              <option value="">เลือกช่วงเวลา</option>
+              <option value="under3">ภายใน 3 ปี</option>
+              <option value="3to7">อีก 3–7 ปี</option>
+              <option value="8to15">อีก 8–15 ปี</option>
+              <option value="over15">อีกมากกว่า 15 ปี</option>
+            </select>
+          </label>
+          <label class="risk-question" for="riskLoss">ถ้ามูลค่าพอร์ตลดลงชั่วคราว คุณรับการลดลงได้แค่ไหนโดยไม่ขายเพราะกังวล?
+            <select id="riskLoss">
+              <option value="">เลือกระดับที่รับได้</option>
+              <option value="upTo10">ไม่เกิน 10%</option>
+              <option value="upTo20">ประมาณ 20%</option>
+              <option value="upTo35">ประมาณ 35%</option>
+              <option value="over35">มากกว่า 35%</option>
+            </select>
+          </label>
+          <label class="risk-question" for="riskBuffer">หากพอร์ตลดลง คุณมีเงินสำรอง/รายได้อื่นพอ โดยไม่ต้องขายสินทรัพย์นี้หรือไม่?
+            <select id="riskBuffer">
+              <option value="">เลือกคำตอบ</option>
+              <option value="no">ไม่พอ / อาจต้องขาย</option>
+              <option value="yes">มีเงินสำรองแยกไว้แล้ว</option>
+            </select>
+          </label>
+        </div>
+        <div class="recommendation" id="recommendation" aria-live="polite">
+          <h4 id="recommendationTitle">ตอบคำถามเพื่อดูตัวอย่างสัดส่วน</h4>
+          <p id="recommendationDescription">ระบบจะพิจารณาระยะเวลาลงทุน ความสามารถและความเต็มใจรับความผันผวนร่วมกัน</p>
+          <div id="recommendationTable"></div>
+        </div>
+        <p class="allocation-sources">หลักการ: <a href="https://www.finra.org/investors/insights/know-your-risk-tolerance" target="_blank" rel="noopener noreferrer">ประเมินความเสี่ยงของ FINRA</a> และ <a href="https://www.finra.org/investors/investing/investing-basics/asset-allocation-diversification" target="_blank" rel="noopener noreferrer">การจัดสรรและกระจายสินทรัพย์</a>. แหล่งอ้างอิงสนับสนุนปัจจัยและหลักการ ไม่ได้กำหนดเปอร์เซ็นต์ชุดนี้; สัดส่วนเป็นตัวอย่างเพื่อการศึกษา ไม่ใช่คำแนะนำการลงทุนเฉพาะบุคคล</p>
+      </section>
     </div>
     <label class="opt" for="flat">
       <input type="checkbox" id="flat">
@@ -281,6 +353,18 @@ function decode(res, i) {
 (function () {
   var $ = function (id) { return document.getElementById(id); };
   var MAX = 10, PAGE = 25, uid = 0;
+  var allocationColors = ["#0b6b5c", "#2f80a0", "#c47a0a", "#7856a6", "#b3382c", "#4f7d32", "#bd5c91", "#607d8b", "#a17c36", "#377f78"];
+  var riskQuestions = ["riskHorizon", "riskLoss", "riskBuffer"];
+  var riskScores = {
+    horizon: { under3: 0, "3to7": 1, "8to15": 2, over15: 3 },
+    loss: { upTo10: 0, upTo20: 1, upTo35: 2, over35: 3 },
+    buffer: { no: 0, yes: 3 }
+  };
+  var allocationProfiles = [
+    { name: "ระมัดระวัง", score: 0, stocks: 30, bonds: 55, cash: 15, description: "เน้นลดความผันผวน แต่ยังมีโอกาสขาดทุนและอาจโตไม่ทันเงินเฟ้อ" },
+    { name: "สมดุล", score: 1, stocks: 60, bonds: 30, cash: 10, description: "แบ่งระหว่างสินทรัพย์เติบโตกับสินทรัพย์ที่มักผันผวนน้อยกว่า แต่ยังขาดทุนได้" },
+    { name: "เติบโต", score: 2, stocks: 80, bonds: 15, cash: 5, description: "เน้นการเติบโตระยะยาวและยอมรับความผันผวน/การขาดทุนที่มากขึ้น" }
+  ];
   var assets = [
     { name: "หุ้นสหรัฐ", w: 40, g: 12, d: 30 },
     { name: "หุ้นไทย", w: 15, g: 8, d: 20 },
@@ -329,6 +413,12 @@ function decode(res, i) {
         return { id: ++uid, name: a.name, w: a.w, g: a.g, d: a.d };
       });
       $("flat").checked = state.flat;
+      if (state.risk && riskQuestions.every(function (id) {
+        return typeof state.risk[id] === "string" &&
+          Array.prototype.some.call($(id).options, function (option) { return option.value === state.risk[id]; });
+      })) {
+        riskQuestions.forEach(function (id) { $(id).value = state.risk[id]; });
+      }
     } catch (error) {
       console.error("Ignoring invalid saved MoneyBrain check-port state.", error);
     }
@@ -339,7 +429,11 @@ function decode(res, i) {
     try {
       localStorage.setItem(storageKey, JSON.stringify({
         assets: assets.map(function (a) { return { name: a.name, w: a.w, g: a.g, d: a.d }; }),
-        flat: $("flat").checked
+        flat: $("flat").checked,
+        risk: riskQuestions.reduce(function (answers, id) {
+          answers[id] = $(id).value;
+          return answers;
+        }, {})
       }));
     } catch (error) {
       storageFailed(error);
@@ -384,6 +478,62 @@ function decode(res, i) {
     $("fix").hidden = !off || tot <= 0;
   }
 
+  function renderAllocation() {
+    var total = 0;
+    assets.forEach(function (a) { total += Math.max(0, a.w); });
+    var chart = $("allocationChart"), legend = $("allocationLegend"), paths = [], items = [], angle = -Math.PI / 2;
+    assets.forEach(function (a, i) {
+      var weight = Math.max(0, a.w), share = total > 0 ? weight / total : 0;
+      var label = nameOf(i), color = allocationColors[i % allocationColors.length];
+      items.push('<li><span class="allocation-swatch" style="background:' + color + '"></span><span>' + esc(label) +
+        '</span><span class="allocation-value">' + (share * 100).toFixed(1) + '%</span></li>');
+      if (share <= 0) return;
+      if (share >= 1) {
+        paths.push('<circle cx="100" cy="100" r="96" fill="' + color + '"/>');
+        return;
+      }
+      var nextAngle = angle + share * Math.PI * 2;
+      var x1 = 100 + 96 * Math.cos(angle), y1 = 100 + 96 * Math.sin(angle);
+      var x2 = 100 + 96 * Math.cos(nextAngle), y2 = 100 + 96 * Math.sin(nextAngle);
+      paths.push('<path d="M100 100 L' + x1.toFixed(3) + ' ' + y1.toFixed(3) + ' A96 96 0 ' +
+        (share > 0.5 ? 1 : 0) + ' 1 ' + x2.toFixed(3) + ' ' + y2.toFixed(3) + ' Z" fill="' + color + '"/>');
+      angle = nextAngle;
+    });
+    chart.innerHTML = total > 0 ? paths.join("") :
+      '<circle class="allocation-empty" cx="100" cy="100" r="96"/><text class="allocation-empty-label" x="100" y="104" text-anchor="middle">ยังไม่มีสัดส่วน</text>';
+    legend.innerHTML = items.join("");
+    chart.setAttribute("aria-label", total > 0 ?
+      "กราฟวงกลมแสดงสัดส่วนที่ปรับตามน้ำหนักรวมของสินทรัพย์ " + assets.map(function (a, i) {
+        return nameOf(i) + " " + (Math.max(0, a.w) / total * 100).toFixed(1) + "%";
+      }).join(", ") :
+      "ยังไม่มีสัดส่วนสินทรัพย์ในพอร์ต");
+  }
+
+  function renderRecommendation() {
+    var answers = riskQuestions.map(function (id) { return $(id).value; });
+    var title = $("recommendationTitle"), description = $("recommendationDescription"), table = $("recommendationTable");
+    if (answers.some(function (answer) { return !answer; })) {
+      title.textContent = "ตอบคำถามเพื่อดูตัวอย่างสัดส่วน";
+      description.textContent = "ระบบจะพิจารณาระยะเวลาลงทุน ความสามารถและความเต็มใจรับความผันผวนร่วมกัน";
+      table.innerHTML = "";
+      return;
+    }
+    var score = Math.min(
+      riskScores.horizon[$("riskHorizon").value],
+      riskScores.loss[$("riskLoss").value],
+      riskScores.buffer[$("riskBuffer").value]
+    );
+    var profile = allocationProfiles[score === 0 ? 0 : score === 1 ? 1 : 2];
+    title.textContent = "ตัวอย่างพอร์ต" + profile.name;
+    description.textContent = profile.description + " ระบบใช้ปัจจัยที่ระมัดระวังที่สุดเป็นตัวกำหนดระดับ";
+    table.innerHTML = "<table><thead><tr><th>กลุ่มสินทรัพย์</th><th>สัดส่วนตัวอย่าง</th></tr></thead><tbody>" +
+      "<tr><td>หุ้นที่กระจายการลงทุน</td><td>" + profile.stocks + "%</td></tr>" +
+      "<tr><td>ตราสารหนี้</td><td>" + profile.bonds + "%</td></tr>" +
+      "<tr><td>เงินสด/สินทรัพย์สภาพคล่อง</td><td>" + profile.cash + "%</td></tr>" +
+      "<tr><td><strong>รวม</strong></td><td><strong>100%</strong></td></tr>" +
+      "</tbody></table><p>ตัวอย่างนี้ไม่รวมทองคำและคริปโต และไม่ได้แทนเงินสำรองฉุกเฉินที่ควรแยกตามความจำเป็น</p>";
+  }
+
   function chips(states) {
     return states.map(function (s, a) {
       var n = esc(nameOf(a));
@@ -401,6 +551,8 @@ function decode(res, i) {
   function update() {
     saveState();
     weightStatus();
+    renderAllocation();
+    renderRecommendation();
     listNames = assets.map(function (a, i) { return { name: nameOf(i), w: a.w, g: a.g, d: a.d }; });
     res = analyze(listNames, $("flat").checked);
     shown = PAGE; hoverPos = 0;
@@ -541,6 +693,7 @@ function decode(res, i) {
     renderRows(); update();
   });
   $("flat").addEventListener("change", update);
+  riskQuestions.forEach(function (id) { $(id).addEventListener("change", update); });
   $("more").addEventListener("click", function () { shown += PAGE; renderList(); });
   var setDir = function (d) {
     dir = d; shown = PAGE;
