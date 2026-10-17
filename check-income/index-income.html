@@ -58,7 +58,7 @@ h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 
 .input input[type="text"] { font-family: var(--font-body); font-weight: 500; }
 .input .unit { padding-right: 11px; color: var(--muted); font-size: 13px; white-space: nowrap; }
 
-.ahead, .arow { display: grid; grid-template-columns: 28px minmax(0, 2fr) repeat(4, minmax(0, 1fr)) 40px; gap: 10px; align-items: center; }
+.ahead, .arow { display: grid; grid-template-columns: 28px minmax(0, 2fr) repeat(4, minmax(0, 1fr)) minmax(80px, .9fr) 40px; gap: 10px; align-items: center; }
 .ahead { font-size: 12.5px; color: var(--muted); padding-bottom: 6px; }
 .arow { margin-bottom: 10px; }
 .arow.off { opacity: .55; }
@@ -133,7 +133,7 @@ th:first-child, td:first-child, th.l, td.l { text-align: left; }
 
   <section class="panel" aria-label="ช่องทางหาเงินของคุณ">
     <h2>ช่องทางหาเงินของคุณ</h2>
-    <div class="ahead" aria-hidden="true"><span></span><span>ชื่องาน / ช่องทาง</span><span>รายได้สุทธิ (บาท/เดือน)</span><span>เวลาที่ใช้ (ชม./เดือน)</span><span>สกิลที่ได้ (0–10)</span><span id="extraHead">สิ่งที่ได้อื่นๆ (0–10)</span><span>เงินนี้สำหรับ</span><span></span></div>
+    <div class="ahead" aria-hidden="true"><span></span><span>ชื่องาน / ช่องทาง</span><span>รายได้สุทธิ (บาท/เดือน)</span><span>เวลาที่ใช้ (ชม./เดือน)</span><span>สกิลที่ได้ (0–10)</span><span id="extraHead">สิ่งที่ได้อื่นๆ (0–10)</span><span>หมายเหตุ</span><span></span></div>
     <div id="rows"></div>
     <div class="toolbar">
       <button class="btn" id="add" type="button">+ เพิ่มช่องทาง</button>
