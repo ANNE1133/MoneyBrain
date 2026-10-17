@@ -133,7 +133,7 @@ th:first-child, td:first-child, th.l, td.l { text-align: left; }
 
   <section class="panel" aria-label="ช่องทางหาเงินของคุณ">
     <h2>ช่องทางหาเงินของคุณ</h2>
-    <div class="ahead" aria-hidden="true"><span></span><span>ชื่องาน / ช่องทาง</span><span>รายได้สุทธิ (บาท/เดือน)</span><span>เวลาที่ใช้ (ชม./เดือน)</span><span>สกิลที่ได้ (0–10)</span><span id="extraHead">สิ่งที่ได้อื่นๆ (0–10)</span><span></span></div>
+    <div class="ahead" aria-hidden="true"><span></span><span>ชื่องาน / ช่องทาง</span><span>รายได้สุทธิ (บาท/เดือน)</span><span>เวลาที่ใช้ (ชม./เดือน)</span><span>สกิลที่ได้ (0–10)</span><span id="extraHead">สิ่งที่ได้อื่นๆ (0–10)</span><span>เงินนี้สำหรับ</span><span></span></div>
     <div id="rows"></div>
     <div class="toolbar">
       <button class="btn" id="add" type="button">+ เพิ่มช่องทาง</button>
@@ -268,6 +268,7 @@ th:first-child, td:first-child, th.l, td.l { text-align: left; }
         f("hrs", "เวลาที่ใช้ (ชม./เดือน)", "number", "ชม.", "1") +
         f("skill", "สกิลที่ได้ (0–10)", "number", "/10", "0.5") +
         f("extra", el + " (0–10)", "number", "/10", "0.5") +
+        f("remarks", "หมายเหตุ", "text", "", "", "nm") +
         '<div class="cell rmc"><button class="rm" type="button" aria-label="ลบช่องทาง ' + (i + 1) + '">&times;</button></div>';
       host.appendChild(row);
       var bind = function (key, isNum) {
