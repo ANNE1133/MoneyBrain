@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>สุ่มมื้ออาหาร เนื้อสัตว์ x วิธีทำ | MoneyBrain</title>
+<meta name="description" content="สุ่มเมนูจากเนื้อสัตว์และวิธีทำ ต้ม ทอด ผัด นึ่ง ย่าง เลือกโหมด clean ตั้งงบ เวลา และเพิ่มข้อกำหนดของตัวเองได้ ใช้ฟรี">
+<link rel="canonical" href="https://anne1133.github.io/MoneyBrain/random-meal/">
+<meta name="theme-color" content="#0b6b5c">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="th_TH">
+<meta property="og:site_name" content="MoneyBrain">
+<meta property="og:title" content="สุ่มมื้ออาหาร เนื้อสัตว์ x วิธีทำ | MoneyBrain">
+<meta property="og:description" content="สุ่มเมนูจากเนื้อสัตว์และวิธีทำ เลือกโหมด clean ตั้งงบ เวลา และเพิ่มข้อกำหนดของตัวเองได้">
+<meta property="og:url" content="https://anne1133.github.io/MoneyBrain/random-meal/">
+<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+:root {
+  --bg: #eef2f3; --surface: #ffffff; --fg: #12262b; --muted: #5d7279; --line: #d3dde0;
+  --accent: #0b6b5c; --accent-soft: #d9efe9; --bad: #b3382c; --bad-soft: #f8e0dc; --warn: #b36b00; --warn-soft: #fbeccf;
+  --font-display: "Bai Jamjuree", "IBM Plex Sans Thai", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans Thai", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1a1e; --surface: #142529; --fg: #e4eef0; --muted: #8fa8af; --line: #284046;
+    --accent: #3fc2a8; --accent-soft: #163c37; --bad: #f27d6f; --bad-soft: #3d1f1c; --warn: #f0b04a; --warn-soft: #3d2e12;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0d1a1e; --surface: #142529; --fg: #e4eef0; --muted: #8fa8af; --line: #284046;
+  --accent: #3fc2a8; --accent-soft: #163c37; --bad: #f27d6f; --bad-soft: #3d1f1c; --warn: #f0b04a; --warn-soft: #3d2e12;
+  color-scheme: dark;
+}
+:root { color-scheme: light; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 15px; line-height: 1.55;
+  padding-block: 28px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+[hidden] { display: none !important; }
+.wrap { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+.back { align-self: flex-start; color: var(--accent); font-weight: 500; font-size: 14px; text-decoration: none; }
+.back:hover { text-decoration: underline; }
+h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(26px, 4vw, 36px); line-height: 1.15; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); margin: -10px 0 0; max-width: 64ch; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; min-width: 0; }
+.panel h2 { font-family: var(--font-display); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; font-weight: 600; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.box { border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+.box h3 { margin: 0 0 10px; font-family: var(--font-display); font-size: 15px; }
+.checks { display: flex; flex-wrap: wrap; gap: 8px; }
+.pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px 5px 10px; cursor: pointer; font-size: 14px; background: var(--bg); user-select: none; }
+.pill:has(input:checked) { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
+.pill:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pill input { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; }
+.pill small { color: var(--muted); font-size: 12px; }
+.linkbtn { background: none; border: 0; padding: 0; color: var(--accent); font: 500 13px var(--font-body); cursor: pointer; }
+.linkbtn:hover { text-decoration: underline; }
+.mini { display: flex; gap: 14px; margin-bottom: 10px; }
+.opt { display: flex; gap: 8px; align-items: flex-start; font-size: 14px; margin-bottom: 14px; }
+.opt input { margin-top: 4px; accent-color: var(--accent); width: 16px; height: 16px; }
+.opt .hint { display: block; color: var(--muted); font-size: 12.5px; }
+.input { display: flex; align-items: center; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); min-width: 0; }
+.input:focus-within { border-color: var(--accent); outline: 2px solid var(--accent-soft); }
+.input input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; color: var(--fg); font: 600 16px var(--font-display); padding: 9px 11px; outline: none; }
+.input input[type="text"] { font-family: var(--font-body); font-weight: 500; }
+.input .unit { padding-right: 11px; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.lbl { display: block; font-size: 13px; margin: 0 0 4px; }
+.num2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.note { color: var(--muted); font-size: 12.5px; margin: 8px 0 0; max-width: 72ch; }
+.btn { font: 500 14px var(--font-body); border: 1px solid var(--line); background: transparent; color: var(--fg); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+.btn:disabled { opacity: .45; cursor: not-allowed; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; padding: 11px 22px; font-size: 16px; }
+.btn.primary:hover:not(:disabled) { color: #fff; filter: brightness(1.08); }
+.btn:focus-visible, .linkbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.count { color: var(--muted); font-size: 13.5px; }
+.req { display: grid; grid-template-columns: 22px minmax(0, 1fr) auto 32px; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.req input { accent-color: var(--accent); width: 16px; height: 16px; }
+.req .t { overflow-wrap: anywhere; }
+.req .s { font-size: 12px; color: var(--muted); }
+.req .s.on { color: var(--accent); }
+.req .x { border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 6px; height: 28px; cursor: pointer; }
+.req .x:hover { color: var(--bad); border-color: var(--bad); }
+.addreq { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; margin-top: 12px; }
+.results { display: grid; gap: 12px; }
+.card { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; background: var(--surface); min-width: 0; }
+.card .when { font-size: 13px; color: var(--muted); }
+.card .dish { font-family: var(--font-display); font-weight: 700; font-size: clamp(24px, 4vw, 34px); line-height: 1.2; margin: 2px 0 10px; overflow-wrap: anywhere; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 12.5px; border-radius: 4px; padding: 2px 9px; background: var(--bg); border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.chip.clean { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); font-weight: 600; }
+.chip.nc { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+.card .reqs { margin-top: 10px; font-size: 13px; color: var(--muted); }
+.empty { color: var(--bad); }
+.hist { margin: 0; padding-left: 20px; color: var(--muted); font-size: 13.5px; }
+.storage-warning { color: var(--bad); font-size: 13px; margin: 8px 0 0; }
+@media (max-width: 720px) { .grid2 { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: no-preference) { .card.pop { animation: pop .25s ease-out; } @keyframes pop { from { transform: scale(.97); opacity: .4; } to { transform: none; opacity: 1; } } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../">&larr; MoneyBrain</a>
+  <h1>สุ่มมื้ออาหาร</h1>
+  <p class="sub">เลือกเนื้อสัตว์กับวิธีทำที่รับได้ ตั้งโหมด clean งบ และเวลา หรือเพิ่มข้อกำหนดของตัวเอง แล้วกดสุ่มเมนูได้เลย ไม่ต้องคิดว่ากินอะไรดี</p>
+
+  <section class="panel" aria-label="ผลการสุ่ม">
+    <h2>เมนูที่สุ่มได้</h2>
+    <div class="actions">
+      <button class="btn primary" id="spin" type="button">สุ่มเมนู</button>
+      <button class="btn" id="spinDay" type="button">สุ่มทั้งวัน (เช้า/กลางวัน/เย็น)</button>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="results" id="results" style="margin-top:14px" aria-live="polite"></div>
+    <details style="margin-top:14px" id="histBox" hidden>
+      <summary style="cursor:pointer;font-size:13.5px;color:var(--accent);font-weight:500">ประวัติที่สุ่มแล้ว</summary>
+      <ol class="hist" id="hist"></ol>
+    </details>
+  </section>
+
+  <section class="panel" aria-label="ตั้งค่า">
+    <h2>เงื่อนไขการสุ่ม</h2>
+    <div class="grid2">
+      <div class="box">
+        <h3>เนื้อสัตว์ / โปรตีน</h3>
+        <div class="mini"><button class="linkbtn" id="allMeat" type="button">เลือกทั้งหมด</button><button class="linkbtn" id="noMeat" type="button">ล้าง</button></div>
+        <div class="checks" id="meats"></div>
+      </div>
+      <div class="box">
+        <h3>วิธีทำ</h3>
+        <div class="mini"><button class="linkbtn" id="allMethod" type="button">เลือกทั้งหมด</button><button class="linkbtn" id="noMethod" type="button">ล้าง</button></div>
+        <div class="checks" id="methods"></div>
+        <p class="note" id="methodNote"></p>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:16px">
+      <div class="box">
+        <h3>Clean และข้อจำกัด</h3>
+        <label class="opt" for="clean">
+          <input type="checkbox" id="clean">
+          <span>โหมด clean
+            <span class="hint">ตัดเมนูทอดออก และเลือกเฉพาะโปรตีนไขมันต่ำ (เช่น อกไก่ สันในหมู ปลา กุ้ง ไข่ เต้าหู้) เมนูผัดให้ใช้น้ำมันน้อย</span></span>
+        </label>
+        <div class="num2">
+          <div><label class="lbl" for="budget">งบโปรตีนต่อมื้อ</label><div class="input"><input id="budget" type="number" inputmode="decimal" min="0" step="5" placeholder="ไม่จำกัด"><span class="unit">บาท</span></div></div>
+          <div><label class="lbl" for="maxTime">เวลาทำไม่เกิน</label><div class="input"><input id="maxTime" type="number" inputmode="decimal" min="0" step="5" placeholder="ไม่จำกัด"><span class="unit">นาที</span></div></div>
+        </div>
+        <p class="note">ราคาและเวลาเป็นค่าประมาณคร่าวๆ เพื่อช่วยคัดกรอง ไม่ใช่ราคาจริงของร้านหรือตลาด เว้นว่างไว้ถ้าไม่ต้องการจำกัด</p>
+      </div>
+      <div class="box">
+        <h3>ข้อกำหนดเพิ่มเติม (requirement)</h3>
+        <div id="reqs"></div>
+        <form class="addreq" id="reqForm">
+          <div class="input"><input id="reqText" type="text" maxlength="60" placeholder="เช่น ไม่เอากุ้ง, ไม่ทอด, ไม่เผ็ด" aria-label="ข้อกำหนดใหม่"></div>
+          <button class="btn" type="submit">เพิ่ม</button>
+        </form>
+        <p class="note">ข้อกำหนดที่ขึ้นต้นด้วย "ไม่" แล้วตามด้วยชื่อเนื้อสัตว์หรือวิธีทำ (เช่น "ไม่เอาหมู", "ไม่ทอด") ระบบกรองให้จริง ส่วนข้อกำหนดอื่น (เช่น "ไม่เผ็ด", "ใส่ผักเยอะ") ระบบจดไว้และแสดงใต้เมนูที่สุ่มได้ เพื่อเตือนตัวเองตอนสั่งหรือทำ</p>
+      </div>
+    </div>
+    <p class="storage-warning" id="storageWarning" role="status" hidden>เบราว์เซอร์นี้ไม่สามารถบันทึกข้อมูลได้ การเปลี่ยนแปลงอาจหายเมื่อปิดหน้า</p>
+  </section>
+
+  <section class="panel" aria-label="หมายเหตุ">
+    <h2>หมายเหตุ</h2>
+    <p class="note" style="margin:0">เมนู ราคา และเวลาเป็นตัวอย่างทั่วไปเพื่อช่วยตัดสินใจ ไม่ใช่คำแนะนำด้านโภชนาการ คำว่า clean ในที่นี้เป็นเกณฑ์ง่ายๆ ของหน้านี้ ถ้ามีโรคประจำตัว แพ้อาหาร หรือต้องควบคุมอาหารเป็นพิเศษ ควรปรึกษาแพทย์หรือนักกำหนดอาหาร</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+  var storageKey = "moneybrain:random-meal:v1", storageAvailable = true, reqUid = 0;
+
+  var METHODS = [
+    { id: "ต้ม", min: 25 }, { id: "ทอด", min: 15 }, { id: "ผัด", min: 10 }, { id: "นึ่ง", min: 20 }, { id: "ย่าง", min: 25 }
+  ];
+  // keys = words used to match "ไม่เอา..." requirements; dishes = method -> dish name (missing method = not offered)
+  var MEATS = [
+    { id: "porkLean", name: "หมูสันใน", keys: ["หมู", "สันใน"], price: 40, clean: true,
+      dishes: { "ต้ม": "ต้มจืดหมูสันใน", "ทอด": "สันในทอดกระเทียม", "ผัด": "ผัดกะเพราหมูสันใน", "นึ่ง": "สันในนึ่งขิง", "ย่าง": "สันในย่าง" } },
+    { id: "porkBelly", name: "หมูสามชั้น", keys: ["หมู", "สามชั้น"], price: 45, clean: false,
+      dishes: { "ต้ม": "ต้มเค็มสามชั้น", "ทอด": "สามชั้นทอดน้ำปลา", "ผัด": "ผัดพริกเกลือสามชั้น", "นึ่ง": "สามชั้นนึ่งซีอิ๊ว", "ย่าง": "สามชั้นย่าง" } },
+    { id: "chickBreast", name: "อกไก่", keys: ["ไก่", "อกไก่"], price: 30, clean: true,
+      dishes: { "ต้ม": "ต้มข่าอกไก่", "ทอด": "อกไก่ทอดกรอบ", "ผัด": "ผัดพริกไทยดำอกไก่", "นึ่ง": "อกไก่นึ่งขิง", "ย่าง": "อกไก่ย่างสมุนไพร" } },
+    { id: "chickLeg", name: "น่องไก่ติดหนัง", keys: ["ไก่", "น่องไก่"], price: 35, clean: false,
+      dishes: { "ต้ม": "ไก่ต้มน้ำปลา", "ทอด": "ไก่ทอดน่อง", "ผัด": "ผัดเผ็ดไก่", "นึ่ง": "ไก่นึ่งซีอิ๊ว", "ย่าง": "ไก่ย่าง" } },
+    { id: "beef", name: "เนื้อวัว", keys: ["เนื้อ", "วัว"], price: 80, clean: true,
+      dishes: { "ต้ม": "ต้มเนื้อเปื่อย", "ทอด": "เนื้อทอดกระเทียม", "ผัด": "ผัดกะเพราเนื้อ", "ย่าง": "เนื้อย่างสไตล์สเต๊ก" } },
+    { id: "fish", name: "ปลา", keys: ["ปลา"], price: 50, clean: true,
+      dishes: { "ต้ม": "ต้มส้มปลา", "ทอด": "ปลาทอดกระเทียม", "ผัด": "ผัดพริกขิงปลา", "นึ่ง": "ปลานึ่งมะนาว", "ย่าง": "ปลาเผา" } },
+    { id: "shrimp", name: "กุ้ง", keys: ["กุ้ง"], price: 70, clean: true,
+      dishes: { "ต้ม": "ต้มยำกุ้ง", "ทอด": "กุ้งทอดกระเทียม", "ผัด": "กุ้งผัดพริกเกลือ", "นึ่ง": "กุ้งนึ่งมะนาว", "ย่าง": "กุ้งเผา" } },
+    { id: "squid", name: "ปลาหมึก", keys: ["หมึก"], price: 60, clean: true,
+      dishes: { "ต้ม": "ต้มจืดปลาหมึก", "ทอด": "ปลาหมึกทอดกระเทียม", "ผัด": "ปลาหมึกผัดไข่เค็ม", "นึ่ง": "ปลาหมึกนึ่งมะนาว", "ย่าง": "ปลาหมึกย่าง" } },
+    { id: "egg", name: "ไข่", keys: ["ไข่"], price: 15, clean: true,
+      dishes: { "ต้ม": "ไข่พะโล้", "ทอด": "ไข่เจียว", "ผัด": "ผัดไข่มะเขือเทศ", "นึ่ง": "ไข่ตุ๋น" } },
+    { id: "tofu", name: "เต้าหู้", keys: ["เต้าหู้"], price: 15, clean: true,
+      dishes: { "ต้ม": "แกงจืดเต้าหู้", "ทอด": "เต้าหู้ทอด", "ผัด": "ผัดเต้าหู้พริกไทยดำ", "นึ่ง": "เต้าหู้นึ่งซีอิ๊ว", "ย่าง": "เต้าหู้ย่าง" } }
+  ];
+
+  function defaults() {
+    var m = {}, t = {};
+    MEATS.forEach(function (x) { m[x.id] = true; });
+    METHODS.forEach(function (x) { t[x.id] = true; });
+    return { meats: m, methods: t, clean: false, budget: "", maxTime: "", reqs: [] };
+  }
+  var st = defaults(), history = [], lastKey = null;
+
+  function fail(e) { storageAvailable = false; console.error("MoneyBrain random-meal storage error", e); $("storageWarning").hidden = false; }
+  function load() {
+    var raw;
+    try { raw = localStorage.getItem(storageKey); } catch (e) { fail(e); return; }
+    if (raw === null) return;
+    try {
+      var s = JSON.parse(raw), d = defaults();
+      if (!s || typeof s !== "object") throw new Error("invalid");
+      MEATS.forEach(function (x) { if (s.meats && typeof s.meats[x.id] === "boolean") d.meats[x.id] = s.meats[x.id]; });
+      METHODS.forEach(function (x) { if (s.methods && typeof s.methods[x.id] === "boolean") d.methods[x.id] = s.methods[x.id]; });
+      d.clean = s.clean === true;
+      d.budget = (typeof s.budget === "number" && isFinite(s.budget) && s.budget > 0) ? s.budget : "";
+      d.maxTime = (typeof s.maxTime === "number" && isFinite(s.maxTime) && s.maxTime > 0) ? s.maxTime : "";
+      if (Array.isArray(s.reqs)) d.reqs = s.reqs.filter(function (r) { return r && typeof r.text === "string" && typeof r.on === "boolean"; }).slice(0, 20).map(function (r) { return { id: ++reqUid, text: r.text.slice(0, 60), on: r.on }; });
+      st = d;
+    } catch (e) { console.error("Ignoring invalid saved state", e); }
+  }
+  function save() {
+    if (!storageAvailable) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({
+        meats: st.meats, methods: st.methods, clean: st.clean,
+        budget: st.budget === "" ? null : st.budget, maxTime: st.maxTime === "" ? null : st.maxTime,
+        reqs: st.reqs.map(function (r) { return { text: r.text, on: r.on }; })
+      }));
+    } catch (e) { fail(e); }
+  }
+
+  // "ไม่เอาหมู" / "ไม่ทอด" -> { meats: [ids], methods: [ids] }; null if not an exclusion or nothing matched
+  function parseExclusion(text) {
+    var m = /^\s*ไม่(?:เอา|กิน|ทาน|ใส่)?\s*(.+?)\s*$/.exec(text);
+    if (!m) return null;
+    var rest = m[1].replace("ปลาหมึก", "หมึก");
+    var out = { meats: [], methods: [] };
+    MEATS.forEach(function (x) { if (x.keys.some(function (k) { return rest.indexOf(k) !== -1; })) out.meats.push(x.id); });
+    METHODS.forEach(function (x) { if (rest.indexOf(x.id) !== -1) out.methods.push(x.id); });
+    return (out.meats.length || out.methods.length) ? out : null;
+  }
+
+  function candidates() {
+    var ex = { meats: {}, methods: {} };
+    st.reqs.forEach(function (r) {
+      if (!r.on) return;
+      var p = parseExclusion(r.text);
+      if (p) { p.meats.forEach(function (id) { ex.meats[id] = true; }); p.methods.forEach(function (id) { ex.methods[id] = true; }); }
+    });
+    var out = [];
+    MEATS.forEach(function (me) {
+      if (!st.meats[me.id] || ex.meats[me.id]) return;
+      if (st.clean && !me.clean) return;
+      if (st.budget !== "" && me.price > st.budget) return;
+      METHODS.forEach(function (mt) {
+        var dish = me.dishes[mt.id];
+        if (!dish || !st.methods[mt.id] || ex.methods[mt.id]) return;
+        if (st.clean && mt.id === "ทอด") return;
+        if (st.maxTime !== "" && mt.min > st.maxTime) return;
+        out.push({ key: me.id + "|" + mt.id, meat: me, method: mt, dish: dish });
+      });
+    });
+    return out;
+  }
+
+  function renderChecks() {
+    $("meats").innerHTML = MEATS.map(function (x) {
+      return '<label class="pill"><input type="checkbox" data-meat="' + x.id + '"' + (st.meats[x.id] ? " checked" : "") + '>' + esc(x.name) + '</label>';
+    }).join("");
+    $("methods").innerHTML = METHODS.map(function (x) {
+      return '<label class="pill"><input type="checkbox" data-method="' + x.id + '"' + (st.methods[x.id] ? " checked" : "") + '>' + x.id + ' <small>~' + x.min + ' น.</small></label>';
+    }).join("");
+  }
+  function renderReqs() {
+    $("reqs").innerHTML = st.reqs.length ? st.reqs.map(function (r) {
+      var f = parseExclusion(r.text);
+      return '<div class="req"><input type="checkbox" data-req="' + r.id + '" aria-label="ใช้ข้อกำหนดนี้"' + (r.on ? " checked" : "") + '><span class="t">' + esc(r.text) + '</span>' +
+        '<span class="s' + (f ? " on" : "") + '">' + (f ? "กรองให้แล้ว" : "จดไว้") + '</span>' +
+        '<button class="x" type="button" data-del="' + r.id + '" aria-label="ลบข้อกำหนด ' + esc(r.text) + '">&times;</button></div>';
+    }).join("") : '<p class="note" style="margin:0 0 4px">ยังไม่มีข้อกำหนดเพิ่มเติม</p>';
+  }
+  function refresh() {
+    save();
+    var c = candidates();
+    $("count").textContent = c.length ? "มีเมนูที่เข้าเงื่อนไข " + c.length + " แบบ" : "ไม่มีเมนูที่เข้าเงื่อนไข";
+    $("spin").disabled = !c.length; $("spinDay").disabled = !c.length;
+    var noFry = st.clean ? "โหมด clean ตัด \"ทอด\" ออกอัตโนมัติ" : "";
+    $("methodNote").textContent = noFry;
+  }
+
+  function pick(cs, avoidKeys, avoidMeats) {
+    var pool = cs;
+    var f1 = cs.filter(function (c) { return avoidKeys.indexOf(c.key) === -1; });
+    if (f1.length) pool = f1;
+    var f2 = pool.filter(function (c) { return avoidMeats.indexOf(c.meat.id) === -1; });
+    if (f2.length) pool = f2;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  function activeReqs() { return st.reqs.filter(function (r) { return r.on; }).map(function (r) { return r.text; }); }
+
+  function card(label, c) {
+    var clean = c.meat.clean && c.method.id !== "ทอด";
+    var dish = esc(c.dish) + (st.clean && c.method.id === "ผัด" ? ' <span style="font-size:.5em;font-weight:500;color:var(--muted)">(น้ำมันน้อย)</span>' : "");
+    var reqs = activeReqs();
+    return '<div class="card pop">' + (label ? '<div class="when">' + label + '</div>' : "") +
+      '<div class="dish">' + dish + '</div><div class="chips">' +
+      '<span class="chip">' + esc(c.meat.name) + '</span><span class="chip">' + c.method.id + '</span>' +
+      '<span class="chip">~' + c.meat.price + ' บาท</span><span class="chip">~' + c.method.min + ' นาที</span>' +
+      (clean ? '<span class="chip clean">✓ clean</span>' : '<span class="chip nc">ไม่ clean</span>') + '</div>' +
+      (reqs.length ? '<div class="reqs">ข้อกำหนด: ' + reqs.map(esc).join(" · ") + '</div>' : "") + '</div>';
+  }
+  function addHistory(arr) {
+    arr.forEach(function (c) { history.unshift(c.dish); });
+    history = history.slice(0, 10);
+    $("hist").innerHTML = history.map(function (h) { return "<li>" + esc(h) + "</li>"; }).join("");
+    $("histBox").hidden = !history.length;
+  }
+  function spin() {
+    var cs = candidates();
+    if (!cs.length) { $("results").innerHTML = '<p class="empty">ไม่มีเมนูที่เข้าเงื่อนไข ลองเลือกเนื้อสัตว์หรือวิธีทำเพิ่ม หรือผ่อนงบ เวลา และข้อกำหนด</p>'; return; }
+    var c = pick(cs, lastKey ? [lastKey] : [], []);
+    lastKey = c.key;
+    $("results").innerHTML = card("", c);
+    addHistory([c]);
+  }
+  function spinDay() {
+    var cs = candidates();
+    if (!cs.length) { spin(); return; }
+    var labels = ["มื้อเช้า", "มื้อกลางวัน", "มื้อเย็น"], keys = [], meats = [], got = [];
+    labels.forEach(function (l) {
+      var c = pick(cs, keys, meats); keys.push(c.key); meats.push(c.meat.id); got.push({ l: l, c: c });
+    });
+    $("results").innerHTML = got.map(function (g) { return card(g.l, g.c); }).join("");
+    lastKey = got[2].c.key;
+    addHistory(got.map(function (g) { return g.c; }).reverse());
+  }
+
+  $("spin").addEventListener("click", spin);
+  $("spinDay").addEventListener("click", spinDay);
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t.dataset.meat) st.meats[t.dataset.meat] = t.checked;
+    else if (t.dataset.method) st.methods[t.dataset.method] = t.checked;
+    else if (t.dataset.req) { st.reqs.forEach(function (r) { if (String(r.id) === t.dataset.req) r.on = t.checked; }); renderReqs(); }
+    else if (t.id === "clean") st.clean = t.checked;
+    else return;
+    refresh();
+  });
+  function setAll(group, val) { var o = group === "meat" ? st.meats : st.methods; Object.keys(o).forEach(function (k) { o[k] = val; }); renderChecks(); refresh(); }
+  $("allMeat").addEventListener("click", function () { setAll("meat", true); });
+  $("noMeat").addEventListener("click", function () { setAll("meat", false); });
+  $("allMethod").addEventListener("click", function () { setAll("method", true); });
+  $("noMethod").addEventListener("click", function () { setAll("method", false); });
+  var numField = function (id, key) {
+    $(id).addEventListener("input", function (e) { var v = parseFloat(e.target.value); st[key] = (isFinite(v) && v > 0) ? v : ""; refresh(); });
+  };
+  numField("budget", "budget"); numField("maxTime", "maxTime");
+  $("reqForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var t = $("reqText").value.trim();
+    if (!t || st.reqs.length >= 20) return;
+    st.reqs.push({ id: ++reqUid, text: t, on: true });
+    $("reqText").value = "";
+    renderReqs(); refresh();
+  });
+  $("reqs").addEventListener("click", function (e) {
+    var id = e.target.getAttribute && e.target.getAttribute("data-del");
+    if (!id) return;
+    st.reqs = st.reqs.filter(function (r) { return String(r.id) !== id; });
+    renderReqs(); refresh();
+  });
+
+  load();
+  $("clean").checked = st.clean;
+  $("budget").value = st.budget; $("maxTime").value = st.maxTime;
+  renderChecks(); renderReqs(); refresh();
+  $("results").innerHTML = '<p class="note" style="margin:0">กด "สุ่มเมนู" เพื่อเริ่ม</p>';
+})();
+</script>
+</body>
+</html>
